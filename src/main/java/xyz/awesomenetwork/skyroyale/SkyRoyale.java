@@ -1,4 +1,4 @@
-package cool.domsgames.skyroyale;
+package xyz.awesomenetwork.skyroyale;
 
 import org.bukkit.plugin.java.JavaPlugin;
 

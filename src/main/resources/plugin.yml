@@ -1,4 +1,4 @@
-main: cool.domsgames.skyroyale.SkyRoyale
+main: xyz.awesomenetwork.skyroyale.SkyRoyale
 version: ${project.version}
 name: ${project.artifactId}
 author: MFN
