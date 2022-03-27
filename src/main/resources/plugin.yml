@@ -1,0 +1,8 @@
+main: cool.domsgames.skyroyale.SkyRoyale
+version: ${project.version}
+name: ${project.artifactId}
+author: MFN
+api-version: 1.18
+depend:
+  - minigametemplate
+  - schematics
