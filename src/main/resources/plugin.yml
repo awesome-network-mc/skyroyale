@@ -1,4 +1,4 @@
-main: cool.domsgames.skyroyale.SkyRoyale
+main: xyz.awesomenetwork.skyroyale.SkyRoyale
 version: ${project.version}
 name: ${project.artifactId}
 author: MFN
@@ -6,3 +6,4 @@ api-version: 1.18
 depend:
   - minigametemplate
   - schematics
+  - void-generator
