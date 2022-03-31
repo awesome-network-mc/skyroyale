@@ -1,0 +1,8 @@
+Heaven:
+  environment: NORMAL
+  schematics:
+    - heaven_1
+Jungle:
+  environment: NORMAL
+  schematics:
+    - jungle_1
