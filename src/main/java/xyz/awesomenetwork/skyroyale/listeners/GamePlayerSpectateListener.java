@@ -2,6 +2,7 @@ package xyz.awesomenetwork.skyroyale.listeners;
 
 import org.bukkit.Location;
 import org.bukkit.World;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
@@ -16,6 +17,7 @@ public class GamePlayerSpectateListener implements Listener {
 
 	@EventHandler
 	public void gamePlayerSpectate(GamePlayerSpectateEvent e) {
-		e.getPlayer().teleport(spawnLocation);
+		Player player = e.getPlayer();
+		if (player.getLocation().getBlockY() < 0) e.getPlayer().teleport(spawnLocation);
 	}
 }
