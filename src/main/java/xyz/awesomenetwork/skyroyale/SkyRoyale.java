@@ -4,7 +4,6 @@ import java.io.IOException;
 
 import org.bukkit.GameRule;
 import org.bukkit.World;
-import org.bukkit.WorldCreator;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import xyz.awesomenetwork.minigametemplate.GameManager;
@@ -23,7 +22,6 @@ import xyz.awesomenetwork.skyroyale.listeners.GamePlayerSpectateListener;
 import xyz.awesomenetwork.skyroyale.listeners.GameRunningTimeListener;
 import xyz.awesomenetwork.skyroyale.listeners.GameStartListener;
 import xyz.awesomenetwork.skyroyale.maps.MapManager;
-import xyz.awesomenetwork.voidgenerator.VoidGenerator;
 
 public class SkyRoyale extends JavaPlugin {
     
@@ -46,13 +44,8 @@ public class SkyRoyale extends JavaPlugin {
             return;
         }
 
-        // Generate islands world
-        // NOTE this world could be pre-generated and become the default world in future, however it's easier for now to just generate on server startup
-        WorldCreator islandWorldCreator = new WorldCreator(skyRoyaleConfig.getIslandsWorldName());
-        islandWorldCreator.environment(mapManager.getLoadedMap().getEnvironment());
-        islandWorldCreator.generator(new VoidGenerator());
-        islandWorldCreator.generateStructures(false);
-        World islandWorld = getServer().createWorld(islandWorldCreator);
+        // Change settings for default world
+        World islandWorld = getServer().getWorlds().get(0);
         islandWorld.setGameRule(GameRule.ANNOUNCE_ADVANCEMENTS, false);
         islandWorld.setGameRule(GameRule.DISABLE_RAIDS, true);
         islandWorld.setGameRule(GameRule.DO_DAYLIGHT_CYCLE, false);
