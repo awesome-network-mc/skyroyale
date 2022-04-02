@@ -43,6 +43,7 @@ public class SkyRoyale extends JavaPlugin {
             getServer().shutdown();
             return;
         }
+        getLogger().info("Chosen map: " + mapManager.getLoadedMap().getName() + ", Island schematics: " + mapManager.getLoadedMap().getIslandSchematics().size());
 
         // Change settings for default world
         World islandWorld = getServer().getWorlds().get(0);
