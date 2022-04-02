@@ -4,14 +4,12 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 
-import org.bukkit.World.Environment;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import xyz.awesomenetwork.skyroyale.maps.MapInfo;
 
 public class MapsConfig extends YamlConfigBase {
-	private final String MAP_ENVIRONMENT = "environment";
 	private final String MAP_SCHEMATICS = "schematics";
 
 	private final HashMap<String, MapInfo> maps = new HashMap<>();
@@ -21,9 +19,8 @@ public class MapsConfig extends YamlConfigBase {
 
 		getConfig().getConfigurationSection("").getKeys(false).forEach(mapName -> {
 			ConfigurationSection mapConfig = getConfig().getConfigurationSection(mapName);
-			Environment environment = Environment.valueOf(mapConfig.getString(MAP_ENVIRONMENT).toUpperCase());
 			List<String> schematics = mapConfig.getStringList(MAP_SCHEMATICS);
-			maps.put(mapName, new MapInfo(mapName, environment, schematics));
+			maps.put(mapName, new MapInfo(mapName, schematics));
 		});
 	}
 
