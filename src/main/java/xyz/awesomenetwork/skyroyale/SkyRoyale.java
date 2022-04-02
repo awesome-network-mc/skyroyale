@@ -65,7 +65,7 @@ public class SkyRoyale extends JavaPlugin {
 
         getServer().getPluginManager().registerEvents(new BlockBreakListener(gameManager), this);
         getServer().getPluginManager().registerEvents(new GameCountdownListener(islandManager, skyRoyaleConfig.getDefaultIslandGenerateSpeedTicks(), skyRoyaleConfig.getIslandGenerateSpeedMultiplierStart(), skyRoyaleConfig.getIslandGenerateSpeedMultiplierEnd()), this);
-        getServer().getPluginManager().registerEvents(new GamePlayerJoinListener(islandManager, this), this);
+        getServer().getPluginManager().registerEvents(new GamePlayerJoinListener(islandManager), this);
         getServer().getPluginManager().registerEvents(new GamePlayerLeaveListener(islandManager), this);
         getServer().getPluginManager().registerEvents(new GamePlayerSpectateListener(islandWorld, skyRoyaleConfig.getIslandSpawnBoxY()), this);
         getServer().getPluginManager().registerEvents(new GameRunningTimeListener(), this);

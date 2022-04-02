@@ -2,6 +2,7 @@ package xyz.awesomenetwork.skyroyale.islands;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.concurrent.ThreadLocalRandom;
 
 import org.bukkit.Location;
@@ -26,6 +27,7 @@ public class IslandManager {
 
 	private final IslandCoordinates[] islandCoordinates;
 	private final ArrayList<SpawnedIsland> islands = new ArrayList<>();
+	private final HashMap<Player, Integer> assignedIslands = new HashMap<>();
 
 	public IslandManager(GameManager gameManager, SchematicHandler schematics, MapManager mapManager, World islandWorld, String islandSpawnBoxSchematicName, int islandY, int islandSpawnBoxY, int distanceBetweenIslands, int defaultIslandGenerateSpeedTicks, LoadedSchematic spawnBoxSchematic) throws IOException {
 		this.gameManager = gameManager;
@@ -105,6 +107,7 @@ public class IslandManager {
 
 		// Assign island to player
 		islands.add(new SpawnedIsland(islandNumber, islandRotation, getIslandRelativeCoordinates(islandNumber), schematic, player, pasteOptions));
+		assignedIslands.put(player, islandNumber);
 
 		return islandNumber;
 	}
@@ -113,15 +116,22 @@ public class IslandManager {
 		return islands.get(islandNumber);
 	}
 
+	public boolean unassignIsland(Player player) {
+		return unassignIsland(assignedIslands.get(player));
+	}
 	public boolean unassignIsland(int islandNumber) {
 		// Don't unassign if the game has started so we're able to crumble the island properly
 		if (gameManager.getGameState() == GameState.STARTED || gameManager.getGameState() == GameState.ENDED) return false;
 
-		// Reassign island
+		// Unassign player from empty island
+		assignedIslands.remove(islands.get(islandNumber).getAssignedPlayer());
+
+		// Reassign final island player to empty island
 		int finalIndex = islands.size() - 1;
 		SpawnedIsland finalIsland = islands.get(finalIndex);
 		islands.set(islandNumber, finalIsland);
 		finalIsland.getAssignedPlayer().teleport(getIslandSpawnBoxCentre(islandNumber));
+		assignedIslands.put(finalIsland.getAssignedPlayer(), islandNumber);
 		islands.remove(finalIndex);
 
 		// Cancel final island paste
