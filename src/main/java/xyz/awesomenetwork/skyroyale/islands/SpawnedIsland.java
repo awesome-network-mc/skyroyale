@@ -1,6 +1,10 @@
 package xyz.awesomenetwork.skyroyale.islands;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
 
 import xyz.awesomenetwork.schematics.SchematicPasteOptions;
 import xyz.awesomenetwork.schematics.data.LoadedSchematic;
@@ -12,6 +16,7 @@ public class SpawnedIsland {
 	private final LoadedSchematic schematic;
 	private final Player player;
 	private final SchematicPasteOptions schematicPasteOptions;
+	private final HashSet<Inventory> chests = new HashSet<>();
 
 	public SpawnedIsland(int id, int rotation, IslandCoordinates relativeCoordinates, LoadedSchematic schematic, Player player, SchematicPasteOptions schematicPasteOptions) {
 		this.id = id;
@@ -44,5 +49,13 @@ public class SpawnedIsland {
 
 	public SchematicPasteOptions getSchematicPasteOptions() {
 		return schematicPasteOptions;
+	}
+
+	public void addChest(Inventory chest) {
+		chests.add(chest);
+	}
+
+	public Set<Inventory> getChestInventories() {
+		return chests;
 	}
 }
