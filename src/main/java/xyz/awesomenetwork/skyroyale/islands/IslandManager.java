@@ -102,7 +102,7 @@ public class IslandManager {
 		// Create island
 		int islandRotation = ThreadLocalRandom.current().nextInt(4) * 90;
 		LoadedSchematic schematic = mapManager.getRandomMapSchematic();
-		SchematicPasteOptions pasteOptions = new SchematicPasteOptions(schematic, getIslandCentre(islandNumber), islandRotation, null, DEFAULT_ISLAND_GENERATE_SPEED_TICKS);
+		SchematicPasteOptions pasteOptions = new SchematicPasteOptions(schematic, getIslandCentre(islandNumber), islandRotation, new ChestFinder(this, islandNumber), DEFAULT_ISLAND_GENERATE_SPEED_TICKS);
 		schematics.pasteSchematic(pasteOptions);
 
 		// Assign island to player
