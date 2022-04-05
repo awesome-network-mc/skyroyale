@@ -3,15 +3,11 @@ package xyz.awesomenetwork.skyroyale.islands;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
 import org.bukkit.Location;
 import org.bukkit.World;
-import org.bukkit.block.Chest;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemStack;
 
 import xyz.awesomenetwork.minigametemplate.GameManager;
 import xyz.awesomenetwork.minigametemplate.enums.GameState;
@@ -19,9 +15,10 @@ import xyz.awesomenetwork.schematics.SchematicHandler;
 import xyz.awesomenetwork.schematics.SchematicPasteOptions;
 import xyz.awesomenetwork.schematics.data.LoadedSchematic;
 import xyz.awesomenetwork.skyroyale.chests.ChestFinder;
+import xyz.awesomenetwork.skyroyale.chests.ChestPopulator;
+import xyz.awesomenetwork.skyroyale.chests.LootTier;
 import xyz.awesomenetwork.skyroyale.configs.ChestLootConfig;
 import xyz.awesomenetwork.skyroyale.configs.SkyRoyaleConfig;
-import xyz.awesomenetwork.skyroyale.loot.WeightedItem;
 import xyz.awesomenetwork.skyroyale.maps.MapManager;
 
 public class IslandManager {
@@ -168,37 +165,12 @@ public class IslandManager {
 		return islands;
 	}
 
-	public void populateIslandChests(int islandNumber, int tier) {
-		int itemsSpawned = 0;
+	public void populateAllIslandChests(int tier) {
+		ChestPopulator chestPopulator = new ChestPopulator();
 
-		List<Chest> chests = getIsland(islandNumber).getChests();
-		int chestIndex = 0;
-		int totalItems = skyRoyaleConfig.getItemsPerChest() * chests.size();
-
-		for (WeightedItem item : chestConfig.getTierGuaranteedItems(tier).getItems()) {
-			populateRandomChestSlot(chests.get(chestIndex).getBlockInventory(), item.getItem());
-			chestIndex++;
-			if (chestIndex >= chests.size()) chestIndex = 0;
-		}
-
-		for (int i = itemsSpawned; i < totalItems; i++) {
-			populateRandomChestSlot(chests.get(chestIndex).getBlockInventory(), chestConfig.getTierRandomItems(tier).getRandomItem());
-			chestIndex++;
-			if (chestIndex >= chests.size()) chestIndex = 0;
-		}
-	}
-
-	private void populateRandomChestSlot(Inventory inventory, ItemStack item) {
-		// Find available chest slots
-		ArrayList<Integer> availableSlots = new ArrayList<Integer>();
-		int i = 0;
-		for (ItemStack inventoryItem : inventory.getStorageContents()) {
-			if (inventoryItem == null) availableSlots.add(i);
-			i++;
-		}
-
-		// Place item in random available slot
-		inventory.setItem(availableSlots.get(ThreadLocalRandom.current().nextInt(availableSlots.size())), item);
+		LootTier loot = chestConfig.getTier(tier);
+		int itemsPerChest = skyRoyaleConfig.getItemsPerChest();
+		islands.forEach(island -> chestPopulator.populate(loot, itemsPerChest, island.getChests()));
 	}
 
 	// Crumbles all but the centre island - this is where everyone should be heading towards
