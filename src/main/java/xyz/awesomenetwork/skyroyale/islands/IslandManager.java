@@ -18,6 +18,7 @@ import xyz.awesomenetwork.minigametemplate.enums.GameState;
 import xyz.awesomenetwork.schematics.SchematicHandler;
 import xyz.awesomenetwork.schematics.SchematicPasteOptions;
 import xyz.awesomenetwork.schematics.data.LoadedSchematic;
+import xyz.awesomenetwork.skyroyale.chests.ChestFinder;
 import xyz.awesomenetwork.skyroyale.configs.ChestLootConfig;
 import xyz.awesomenetwork.skyroyale.configs.SkyRoyaleConfig;
 import xyz.awesomenetwork.skyroyale.loot.WeightedItem;
