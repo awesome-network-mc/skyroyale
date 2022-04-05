@@ -1,9 +1,9 @@
 package xyz.awesomenetwork.skyroyale.islands;
 
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.Chest;
-import org.bukkit.block.data.BlockData;
 
 import xyz.awesomenetwork.schematics.SchematicPasteCallback;
 import xyz.awesomenetwork.schematics.data.LocationNoWorld;
@@ -18,10 +18,9 @@ public class ChestFinder implements SchematicPasteCallback {
 	}
 
 	@Override
-	public boolean blockPaste(String pasteId, Block block, BlockData blockData, Location pasteCentre, Location absoluteLocation, LocationNoWorld relativeLocation) {
-		if (block instanceof Chest) {
-			islandManager.getIsland(islandNumber).addChest(((Chest) block).getBlockInventory());
+	public void postPaste(String pasteId, Block block, Location pasteCentre, Location absoluteLocation, LocationNoWorld relativeLocation) {
+		if (block.getType() == Material.CHEST) {
+			islandManager.getIsland(islandNumber).addChest((Chest) block.getState());
 		}
-		return true;
 	}
 }
