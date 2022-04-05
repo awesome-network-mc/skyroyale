@@ -16,9 +16,9 @@ import xyz.awesomenetwork.schematics.SchematicPasteOptions;
 import xyz.awesomenetwork.schematics.data.LoadedSchematic;
 import xyz.awesomenetwork.skyroyale.chests.ChestFinder;
 import xyz.awesomenetwork.skyroyale.chests.ChestPopulator;
-import xyz.awesomenetwork.skyroyale.chests.LootTier;
 import xyz.awesomenetwork.skyroyale.configs.ChestLootConfig;
 import xyz.awesomenetwork.skyroyale.configs.SkyRoyaleConfig;
+import xyz.awesomenetwork.skyroyale.loot.LootTier;
 import xyz.awesomenetwork.skyroyale.maps.MapManager;
 
 public class IslandManager {

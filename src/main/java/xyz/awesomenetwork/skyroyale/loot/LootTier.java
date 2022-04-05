@@ -1,6 +1,4 @@
-package xyz.awesomenetwork.skyroyale.chests;
-
-import xyz.awesomenetwork.skyroyale.loot.WeightedItemList;
+package xyz.awesomenetwork.skyroyale.loot;
 
 public class LootTier {
 	private WeightedItemList guaranteedItems, randomItems;

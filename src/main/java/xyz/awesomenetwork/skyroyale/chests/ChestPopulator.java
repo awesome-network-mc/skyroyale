@@ -8,6 +8,7 @@ import org.bukkit.block.Chest;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
+import xyz.awesomenetwork.skyroyale.loot.LootTier;
 import xyz.awesomenetwork.skyroyale.loot.WeightedItem;
 
 public class ChestPopulator {

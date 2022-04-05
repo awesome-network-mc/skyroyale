@@ -10,7 +10,7 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import xyz.awesomenetwork.skyroyale.chests.LootTier;
+import xyz.awesomenetwork.skyroyale.loot.LootTier;
 import xyz.awesomenetwork.skyroyale.loot.WeightedItem;
 import xyz.awesomenetwork.skyroyale.loot.WeightedItemList;
 
