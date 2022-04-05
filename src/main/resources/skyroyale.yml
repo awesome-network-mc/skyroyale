@@ -7,3 +7,4 @@ island_spawn_box_schematic: "island_spawn_box"
 distance_between_islands: 18
 island_world_name: "skyroyale_islands"
 base_island_crumble_start_seconds: 30
+island_items_per_chest: 7
