@@ -36,7 +36,7 @@ public class GameStartListener implements Listener {
 
 	@EventHandler
 	public void gameStart(GameStartEvent e) {
-		islandManager.getIslands().forEach(island -> islandManager.populateIslandChests(island.getIslandNumber(), 1));
+		islandManager.getIslands().forEach(island -> islandManager.populateAllIslandChests(1));
 
 		islandManager.getIslands().forEach(island -> {
 			schematicHandler.pasteSchematic(new SchematicPasteOptions(ISLAND_SPAWN_BOX_SCHEMATIC, islandManager.getIslandSpawnBoxCentre(island.getIslandNumber()), 0, islandDeleter, 0));
@@ -61,5 +61,17 @@ public class GameStartListener implements Listener {
 		islandWorld.getWorldBorder().setSize(distance * 2);
 
 		plugin.getServer().getPluginManager().registerEvents(new GameRunningTimeListener(islandManager, islandWorld, skyRoyaleConfig), plugin);
+
+		// Create scheduled tasks for supply drops
+		int supplyDrop1Ticks = (crumbleStartSeconds * 20) / 3;
+		int supplyDrop2Ticks = (int) ((crumbleStartSeconds * 20) / 1.5);
+
+		plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, () -> {
+
+		}, supplyDrop1Ticks);
+
+		plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, () -> {
+
+		}, supplyDrop2Ticks);
 	}
 }
