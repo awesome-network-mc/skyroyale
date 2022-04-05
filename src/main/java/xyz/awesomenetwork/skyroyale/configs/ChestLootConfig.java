@@ -10,6 +10,7 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import xyz.awesomenetwork.skyroyale.chests.LootTier;
 import xyz.awesomenetwork.skyroyale.loot.WeightedItem;
 import xyz.awesomenetwork.skyroyale.loot.WeightedItemList;
 
@@ -19,7 +20,7 @@ public class ChestLootConfig extends YamlConfigBase {
 	private final String WEIGHT_KEY = "weight";
 
 	private final String GUARANTEED_ITEMS_KEY = "guaranteed";
-	private final String WEIGHTED_ITEMS_KEY = "random";
+	private final String RANDOM_ITEMS_KEY = "random";
 
 	private final HashMap<Integer, HashMap<String, WeightedItemList>> weightedItems = new HashMap<>();
 
@@ -58,18 +59,10 @@ public class ChestLootConfig extends YamlConfigBase {
 		return new WeightedItemList(items);
 	}
 
-	private WeightedItemList getTierItemSection(int tier, String itemSection) {
-		if (!weightedItems.containsKey(tier)) return null;
-		if (!weightedItems.get(tier).containsKey(itemSection)) return null;
+	public LootTier getTier(int tier) {
+		WeightedItemList guaranteedItems = weightedItems.get(tier).get(GUARANTEED_ITEMS_KEY);
+		WeightedItemList randomItems = weightedItems.get(tier).get(RANDOM_ITEMS_KEY);
 
-		return weightedItems.get(tier).get(itemSection);
-	}
-
-	public WeightedItemList getTierGuaranteedItems(int tier) {
-		return getTierItemSection(tier, GUARANTEED_ITEMS_KEY);
-	}
-
-	public WeightedItemList getTierRandomItems(int tier) {
-		return getTierItemSection(tier, WEIGHTED_ITEMS_KEY);
+		return new LootTier(guaranteedItems, randomItems);
 	}
 }
