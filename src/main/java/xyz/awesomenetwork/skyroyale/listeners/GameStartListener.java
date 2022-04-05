@@ -25,6 +25,8 @@ public class GameStartListener implements Listener {
 
 	@EventHandler
 	public void gameStart(GameStartEvent e) {
+		islandManager.getIslands().forEach(island -> islandManager.populateIslandChests(island.getIslandNumber(), 1));
+
 		islandManager.getIslands().forEach(island -> {
 			schematicHandler.pasteSchematic(new SchematicPasteOptions(ISLAND_SPAWN_BOX_SCHEMATIC, islandManager.getIslandSpawnBoxCentre(island.getIslandNumber()), 0, islandDeleter, 0));
 		});
