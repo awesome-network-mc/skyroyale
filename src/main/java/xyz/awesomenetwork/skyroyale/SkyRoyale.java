@@ -49,6 +49,7 @@ public class SkyRoyale extends JavaPlugin {
 
         // Change settings for default world
         World islandWorld = getServer().getWorlds().get(0);
+        islandWorld.setTime(6000);
         islandWorld.setGameRule(GameRule.ANNOUNCE_ADVANCEMENTS, false);
         islandWorld.setGameRule(GameRule.DISABLE_RAIDS, true);
         islandWorld.setGameRule(GameRule.DO_DAYLIGHT_CYCLE, false);
