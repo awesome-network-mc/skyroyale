@@ -21,7 +21,6 @@ import xyz.awesomenetwork.skyroyale.listeners.GameCountdownListener;
 import xyz.awesomenetwork.skyroyale.listeners.GamePlayerJoinListener;
 import xyz.awesomenetwork.skyroyale.listeners.GamePlayerLeaveListener;
 import xyz.awesomenetwork.skyroyale.listeners.GamePlayerSpectateListener;
-import xyz.awesomenetwork.skyroyale.listeners.GameRunningTimeListener;
 import xyz.awesomenetwork.skyroyale.listeners.GameStartListener;
 import xyz.awesomenetwork.skyroyale.maps.MapManager;
 
@@ -60,7 +59,7 @@ public class SkyRoyale extends JavaPlugin {
         IslandManager islandManager = null;
         try {
             spawnBoxSchematic = schematicHandler.loadSchematic(skyRoyaleConfig.getIslandSpawnBoxSchematicName());
-            islandManager = new IslandManager(gameManager, schematicHandler, mapManager, islandWorld, skyRoyaleConfig.getIslandSpawnBoxSchematicName(), skyRoyaleConfig.getIslandY(), skyRoyaleConfig.getIslandSpawnBoxY(), skyRoyaleConfig.getDistanceBetweenIslands(), skyRoyaleConfig.getDefaultIslandGenerateSpeedTicks(), spawnBoxSchematic, chestConfig, skyRoyaleConfig.getItemsPerChest());
+            islandManager = new IslandManager(gameManager, schematicHandler, mapManager, islandWorld, spawnBoxSchematic, chestConfig, skyRoyaleConfig);
         } catch (IOException e) {
             e.printStackTrace();
             getServer().shutdown();
@@ -73,7 +72,6 @@ public class SkyRoyale extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new GamePlayerJoinListener(islandManager), this);
         getServer().getPluginManager().registerEvents(new GamePlayerLeaveListener(islandManager), this);
         getServer().getPluginManager().registerEvents(new GamePlayerSpectateListener(islandWorld, skyRoyaleConfig.getIslandSpawnBoxY()), this);
-        getServer().getPluginManager().registerEvents(new GameRunningTimeListener(), this);
-        getServer().getPluginManager().registerEvents(new GameStartListener(islandManager, schematicHandler, spawnBoxSchematic), this);
+        getServer().getPluginManager().registerEvents(new GameStartListener(this, islandManager, schematicHandler, spawnBoxSchematic), this);
     }
 }

@@ -13,6 +13,7 @@ public class SkyRoyaleConfig extends YamlConfigBase {
 	private final String ISLAND_WORLD_NAME = "island_world_name";
 	private final String BASE_ISLAND_CRUMBLE_START_SECONDS = "base_island_crumble_start_seconds";
 	private final String ISLAND_ITEMS_PER_CHEST = "island_items_per_chest";
+	private final String ISLAND_CRUMBLE_SPEED = "island_crumble_speed";
 
 	public SkyRoyaleConfig(JavaPlugin plugin) {
 		super(plugin, "skyroyale.yml", true);
@@ -56,5 +57,9 @@ public class SkyRoyaleConfig extends YamlConfigBase {
 
 	public int getItemsPerChest() {
 		return getConfig().getInt(ISLAND_ITEMS_PER_CHEST);
+	}
+
+	public int getIslandCrumbleSpeed() {
+		return getConfig().getInt(ISLAND_CRUMBLE_SPEED);
 	}
 }

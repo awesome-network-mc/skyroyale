@@ -2,6 +2,7 @@ package xyz.awesomenetwork.skyroyale.listeners;
 
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.plugin.Plugin;
 
 import xyz.awesomenetwork.minigametemplate.events.GameStartEvent;
 import xyz.awesomenetwork.schematics.SchematicHandler;
@@ -11,13 +12,15 @@ import xyz.awesomenetwork.skyroyale.islands.IslandDeleter;
 import xyz.awesomenetwork.skyroyale.islands.IslandManager;
 
 public class GameStartListener implements Listener {
+	private final Plugin plugin;
 	private final IslandManager islandManager;
 	private final SchematicHandler schematicHandler;
 	private final LoadedSchematic ISLAND_SPAWN_BOX_SCHEMATIC;
 
 	private final IslandDeleter islandDeleter = new IslandDeleter();
 
-	public GameStartListener(IslandManager islandManager, SchematicHandler schematicHandler, LoadedSchematic islandSpawnBox) {
+	public GameStartListener(Plugin plugin, IslandManager islandManager, SchematicHandler schematicHandler, LoadedSchematic islandSpawnBox) {
+		this.plugin = plugin;
 		this.islandManager = islandManager;
 		this.schematicHandler = schematicHandler;
 		this.ISLAND_SPAWN_BOX_SCHEMATIC = islandSpawnBox;
@@ -30,5 +33,11 @@ public class GameStartListener implements Listener {
 		islandManager.getIslands().forEach(island -> {
 			schematicHandler.pasteSchematic(new SchematicPasteOptions(ISLAND_SPAWN_BOX_SCHEMATIC, islandManager.getIslandSpawnBoxCentre(island.getIslandNumber()), 0, islandDeleter, 0));
 		});
+
+		int amountOfIslands = islandManager.getIslands().size();
+		// This is a magic formula that someone I was working with wrote ~5 years ago. It was designed to modify the island crumble start time based on how many players the game started with, and to make the game feel fast paced no matter the size. It was only designed for up to 100 people.
+		int crumbleStartSeconds = (int) Math.floor(21.3 + Math.sqrt(100 * (amountOfIslands - 1)) + (2.545 / (2 * Math.pow(10, 15))) * Math.pow(amountOfIslands, 8) - (13 / (104 * Math.pow(10, 6))) * Math.pow(amountOfIslands, 4)) - 1;
+
+		plugin.getServer().getPluginManager().registerEvents(new GameRunningTimeListener(islandManager, crumbleStartSeconds), plugin);
 	}
 }

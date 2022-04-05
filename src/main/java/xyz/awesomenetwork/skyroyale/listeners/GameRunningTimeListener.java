@@ -4,10 +4,21 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
 import xyz.awesomenetwork.minigametemplate.events.GameRunningTimeEvent;
+import xyz.awesomenetwork.skyroyale.islands.IslandManager;
 
 public class GameRunningTimeListener implements Listener {
+	private final IslandManager islandManager;
+	private final int islandCrumbleStartSeconds;
+
+	public GameRunningTimeListener(IslandManager islandManager, int islandCrumbleStartSeconds) {
+		this.islandManager = islandManager;
+		this.islandCrumbleStartSeconds = islandCrumbleStartSeconds;
+	}
+
 	@EventHandler
 	public void gameRunningTime(GameRunningTimeEvent e) {
-		// TODO when game time hits a certain threshold then start crumbling the islands and shrinking the world border
+		if (e.getGameRunningTimeInSeconds() == islandCrumbleStartSeconds) {
+			islandManager.crumbleIslands();
+		}
 	}
 }

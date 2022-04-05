@@ -19,6 +19,7 @@ import xyz.awesomenetwork.schematics.SchematicHandler;
 import xyz.awesomenetwork.schematics.SchematicPasteOptions;
 import xyz.awesomenetwork.schematics.data.LoadedSchematic;
 import xyz.awesomenetwork.skyroyale.configs.ChestLootConfig;
+import xyz.awesomenetwork.skyroyale.configs.SkyRoyaleConfig;
 import xyz.awesomenetwork.skyroyale.loot.WeightedItem;
 import xyz.awesomenetwork.skyroyale.maps.MapManager;
 
@@ -29,25 +30,20 @@ public class IslandManager {
 	private final World islandWorld;
 	private final LoadedSchematic ISLAND_SPAWN_BOX_SCHEMATIC;
 	private final ChestLootConfig chestConfig;
-
-	private final int ISLAND_Y, ISLAND_SPAWN_BOX_Y, DISTANCE_BETWEEN_ISLANDS, DEFAULT_ISLAND_GENERATE_SPEED_TICKS, ITEMS_PER_CHEST;
+	private final SkyRoyaleConfig skyRoyaleConfig;
 
 	private final IslandCoordinates[] islandCoordinates;
 	private final ArrayList<SpawnedIsland> islands = new ArrayList<>();
 	private final HashMap<Player, Integer> assignedIslands = new HashMap<>();
 
-	public IslandManager(GameManager gameManager, SchematicHandler schematics, MapManager mapManager, World islandWorld, String islandSpawnBoxSchematicName, int islandY, int islandSpawnBoxY, int distanceBetweenIslands, int defaultIslandGenerateSpeedTicks, LoadedSchematic spawnBoxSchematic, ChestLootConfig chestConfig, int itemsPerChest) throws IOException {
+	public IslandManager(GameManager gameManager, SchematicHandler schematics, MapManager mapManager, World islandWorld, LoadedSchematic spawnBoxSchematic, ChestLootConfig chestConfig, SkyRoyaleConfig skyRoyaleConfig) throws IOException {
 		this.gameManager = gameManager;
 		this.schematics = schematics;
 		this.mapManager = mapManager;
 		this.islandWorld = islandWorld;
 		ISLAND_SPAWN_BOX_SCHEMATIC = spawnBoxSchematic;
-		ISLAND_Y = islandY;
-		ISLAND_SPAWN_BOX_Y = islandSpawnBoxY;
-		DISTANCE_BETWEEN_ISLANDS = distanceBetweenIslands;
-		DEFAULT_ISLAND_GENERATE_SPEED_TICKS = defaultIslandGenerateSpeedTicks;
 		this.chestConfig = chestConfig;
-		ITEMS_PER_CHEST = itemsPerChest;
+		this.skyRoyaleConfig = skyRoyaleConfig;
 
 		int maxPlayers = gameManager.getOptions().maxPlayers;
 		islandCoordinates = new IslandCoordinates[maxPlayers];
@@ -90,12 +86,12 @@ public class IslandManager {
 
 	private Location getIslandCentre(int islandNumber) {
 		IslandCoordinates islandCoords = getIslandAbsoluteCoordinates(islandNumber);
-		return new Location(islandWorld, islandCoords.x + 0.5, ISLAND_Y, islandCoords.z + 0.5);
+		return new Location(islandWorld, islandCoords.x + 0.5, skyRoyaleConfig.getIslandY(), islandCoords.z + 0.5);
 	}
 
 	public Location getIslandSpawnBoxCentre(int islandNumber) {
 		IslandCoordinates islandCoords = getIslandAbsoluteCoordinates(islandNumber);
-		return new Location(islandWorld, islandCoords.x + 0.5, ISLAND_SPAWN_BOX_Y + 0.1, islandCoords.z + 0.5);
+		return new Location(islandWorld, islandCoords.x + 0.5, skyRoyaleConfig.getIslandSpawnBoxY() + 0.1, islandCoords.z + 0.5);
 	}
 
 	public int assignIsland(Player player) {
@@ -111,7 +107,7 @@ public class IslandManager {
 		// Create island
 		int islandRotation = ThreadLocalRandom.current().nextInt(4) * 90;
 		LoadedSchematic schematic = mapManager.getRandomMapSchematic();
-		SchematicPasteOptions pasteOptions = new SchematicPasteOptions(schematic, getIslandCentre(islandNumber), islandRotation, new ChestFinder(this, islandNumber), DEFAULT_ISLAND_GENERATE_SPEED_TICKS);
+		SchematicPasteOptions pasteOptions = new SchematicPasteOptions(schematic, getIslandCentre(islandNumber), islandRotation, new ChestFinder(this, islandNumber), skyRoyaleConfig.getDefaultIslandGenerateSpeedTicks());
 		schematics.pasteSchematic(pasteOptions);
 
 		// Assign island to player
@@ -160,7 +156,7 @@ public class IslandManager {
 	public IslandCoordinates getIslandAbsoluteCoordinates(int island) {
 		IslandCoordinates relativeCoords = getIslandRelativeCoordinates(island);
 
-		return new IslandCoordinates(relativeCoords.x * DISTANCE_BETWEEN_ISLANDS, relativeCoords.z * DISTANCE_BETWEEN_ISLANDS);
+		return new IslandCoordinates(relativeCoords.x * skyRoyaleConfig.getDistanceBetweenIslands(), relativeCoords.z * skyRoyaleConfig.getDistanceBetweenIslands());
 	}
 
 	public void setGlobalIslandGenerateSpeed(int ticksToComplete) {
@@ -176,7 +172,7 @@ public class IslandManager {
 
 		List<Chest> chests = getIsland(islandNumber).getChests();
 		int chestIndex = 0;
-		int totalItems = ITEMS_PER_CHEST * chests.size();
+		int totalItems = skyRoyaleConfig.getItemsPerChest() * chests.size();
 
 		for (WeightedItem item : chestConfig.getTierGuaranteedItems(tier).getItems()) {
 			populateRandomChestSlot(chests.get(chestIndex).getBlockInventory(), item.getItem());
@@ -202,5 +198,16 @@ public class IslandManager {
 
 		// Place item in random available slot
 		inventory.setItem(availableSlots.get(ThreadLocalRandom.current().nextInt(availableSlots.size())), item);
+	}
+
+	// Crumbles all but the centre island - this is where everyone should be heading towards
+	public void crumbleIslands() {
+		SpawnedIsland island;
+		for (int i = 1; i < islands.size(); i++) {
+			island = islands.get(i);
+
+			SchematicPasteOptions pasteOptions = new SchematicPasteOptions(island.getSchematic(), getIslandCentre(i), island.getRotation(), new IslandCrumbler(), skyRoyaleConfig.getIslandCrumbleSpeed());
+			schematics.pasteSchematic(pasteOptions);
+		}
 	}
 }
