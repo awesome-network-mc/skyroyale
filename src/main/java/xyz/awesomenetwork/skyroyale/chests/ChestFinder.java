@@ -1,4 +1,4 @@
-package xyz.awesomenetwork.skyroyale.islands;
+package xyz.awesomenetwork.skyroyale.chests;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -7,6 +7,7 @@ import org.bukkit.block.Chest;
 
 import xyz.awesomenetwork.schematics.SchematicPasteCallback;
 import xyz.awesomenetwork.schematics.data.LocationNoWorld;
+import xyz.awesomenetwork.skyroyale.islands.IslandManager;
 
 public class ChestFinder implements SchematicPasteCallback {
 	private final IslandManager islandManager;

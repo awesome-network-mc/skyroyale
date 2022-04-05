@@ -1,5 +1,7 @@
 package xyz.awesomenetwork.skyroyale.islands;
 
+import java.util.concurrent.ThreadLocalRandom;
+
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -15,7 +17,10 @@ public class IslandCrumbler implements SchematicPasteCallback {
 	public boolean prePaste(String pasteId, BlockData blockData, Location pasteCentre, Location absoluteLocation, LocationNoWorld relativeLocation) {
 		World world = absoluteLocation.getWorld();
 		world.setBlockData(absoluteLocation, AIR);
-		world.spawnFallingBlock(absoluteLocation, blockData);
+
+		// Only show 50% of the falling blocks for framerate reasons
+		if (ThreadLocalRandom.current().nextInt(2) == 0) world.spawnFallingBlock(absoluteLocation, blockData);
+
 		return false;
 	}
 }
