@@ -12,6 +12,7 @@ public class SkyRoyaleConfig extends YamlConfigBase {
 	private final String DISTANCE_BETWEEN_ISLANDS = "distance_between_islands";
 	private final String ISLAND_WORLD_NAME = "island_world_name";
 	private final String BASE_ISLAND_CRUMBLE_START_SECONDS = "base_island_crumble_start_seconds";
+	private final String ISLAND_ITEMS_PER_CHEST = "island_items_per_chest";
 
 	public SkyRoyaleConfig(JavaPlugin plugin) {
 		super(plugin, "skyroyale.yml", true);
@@ -51,5 +52,9 @@ public class SkyRoyaleConfig extends YamlConfigBase {
 
 	public int getBaseIslandCrumbleStartSeconds() {
 		return getConfig().getInt(BASE_ISLAND_CRUMBLE_START_SECONDS);
+	}
+
+	public int getItemsPerChest() {
+		return getConfig().getInt(ISLAND_ITEMS_PER_CHEST);
 	}
 }

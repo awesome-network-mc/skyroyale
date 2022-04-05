@@ -11,6 +11,7 @@ import xyz.awesomenetwork.minigametemplate.GameManagerOptions;
 import xyz.awesomenetwork.minigametemplate.MinigameTemplate;
 import xyz.awesomenetwork.schematics.SchematicHandler;
 import xyz.awesomenetwork.schematics.data.LoadedSchematic;
+import xyz.awesomenetwork.skyroyale.configs.ChestLootConfig;
 import xyz.awesomenetwork.skyroyale.configs.MapsConfig;
 import xyz.awesomenetwork.skyroyale.configs.SkyRoyaleConfig;
 import xyz.awesomenetwork.skyroyale.islands.IslandManager;
@@ -35,6 +36,7 @@ public class SkyRoyale extends JavaPlugin {
 
         SkyRoyaleConfig skyRoyaleConfig = new SkyRoyaleConfig(this);
         MapsConfig mapsConfig = new MapsConfig(this);
+        ChestLootConfig chestConfig = new ChestLootConfig(this);
 
         MapManager mapManager = null;
         try {
@@ -58,7 +60,7 @@ public class SkyRoyale extends JavaPlugin {
         IslandManager islandManager = null;
         try {
             spawnBoxSchematic = schematicHandler.loadSchematic(skyRoyaleConfig.getIslandSpawnBoxSchematicName());
-            islandManager = new IslandManager(gameManager, schematicHandler, mapManager, islandWorld, skyRoyaleConfig.getIslandSpawnBoxSchematicName(), skyRoyaleConfig.getIslandY(), skyRoyaleConfig.getIslandSpawnBoxY(), skyRoyaleConfig.getDistanceBetweenIslands(), skyRoyaleConfig.getDefaultIslandGenerateSpeedTicks(), spawnBoxSchematic);
+            islandManager = new IslandManager(gameManager, schematicHandler, mapManager, islandWorld, skyRoyaleConfig.getIslandSpawnBoxSchematicName(), skyRoyaleConfig.getIslandY(), skyRoyaleConfig.getIslandSpawnBoxY(), skyRoyaleConfig.getDistanceBetweenIslands(), skyRoyaleConfig.getDefaultIslandGenerateSpeedTicks(), spawnBoxSchematic, chestConfig, skyRoyaleConfig.getItemsPerChest());
         } catch (IOException e) {
             e.printStackTrace();
             getServer().shutdown();

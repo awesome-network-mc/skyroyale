@@ -11,7 +11,7 @@ public class IslandDeleter implements SchematicPasteCallback {
 	private final BlockData AIR = Material.AIR.createBlockData();
 
 	@Override
-	public boolean blockPaste(String pasteId, BlockData block, Location pasteCentre, Location absoluteLocation, LocationNoWorld relativeLocation) {
+	public boolean prePaste(String pasteId, BlockData blockdata, Location pasteCentre, Location absoluteLocation, LocationNoWorld relativeLocation) {
 		absoluteLocation.getWorld().setBlockData(absoluteLocation, AIR);
 		return false;
 	}

@@ -12,11 +12,10 @@ public class IslandCrumbler implements SchematicPasteCallback {
 	private final BlockData AIR = Material.AIR.createBlockData();
 
 	@Override
-	public boolean blockPaste(String pasteId, BlockData block, Location pasteCentre, Location absoluteLocation, LocationNoWorld relativeLocation) {
+	public boolean prePaste(String pasteId, BlockData blockData, Location pasteCentre, Location absoluteLocation, LocationNoWorld relativeLocation) {
 		World world = absoluteLocation.getWorld();
-		BlockData blockInLocation = world.getBlockData(absoluteLocation);
 		world.setBlockData(absoluteLocation, AIR);
-		world.spawnFallingBlock(absoluteLocation, blockInLocation);
+		world.spawnFallingBlock(absoluteLocation, blockData);
 		return false;
 	}
 }
