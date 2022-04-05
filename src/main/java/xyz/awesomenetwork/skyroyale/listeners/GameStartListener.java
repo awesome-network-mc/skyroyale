@@ -40,7 +40,7 @@ public class GameStartListener implements Listener {
 
 		int amountOfIslands = islandManager.getIslands().size();
 		// This is a magic formula that someone I was working with wrote ~5 years ago. It was designed to modify the island crumble start time based on how many players the game started with, and to make the game feel fast paced no matter the size. It was only designed for up to 100 people.
-		int crumbleStartSeconds = (int) Math.floor(21.3 + Math.sqrt(100 * (amountOfIslands - 1)) + (2.545 / (2 * Math.pow(10, 15))) * Math.pow(amountOfIslands, 8) - (13 / (104 * Math.pow(10, 6))) * Math.pow(amountOfIslands, 4)) - 1;
+		int crumbleStartSeconds = (int) Math.floor(21.3 + Math.sqrt(100 * (amountOfIslands - 1)) + (2.545 / (2 * Math.pow(10, 15))) * Math.pow(amountOfIslands, 8) - (13 / (104 * Math.pow(10, 6))) * Math.pow(amountOfIslands, 4)) + 29;
 
 		// When time hits 12000, islands start to crumble as it turns to night
 		islandWorld.setTime(12000 - (crumbleStartSeconds * 20));
