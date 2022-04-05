@@ -10,8 +10,10 @@ import xyz.awesomenetwork.minigametemplate.events.GameStartEvent;
 import xyz.awesomenetwork.schematics.SchematicHandler;
 import xyz.awesomenetwork.schematics.SchematicPasteOptions;
 import xyz.awesomenetwork.schematics.data.LoadedSchematic;
+import xyz.awesomenetwork.skyroyale.configs.SkyRoyaleConfig;
 import xyz.awesomenetwork.skyroyale.islands.IslandDeleter;
 import xyz.awesomenetwork.skyroyale.islands.IslandManager;
+import xyz.awesomenetwork.skyroyale.islands.SpawnedIsland;
 
 public class GameStartListener implements Listener {
 	private final Plugin plugin;
@@ -19,15 +21,17 @@ public class GameStartListener implements Listener {
 	private final SchematicHandler schematicHandler;
 	private final LoadedSchematic ISLAND_SPAWN_BOX_SCHEMATIC;
 	private final World islandWorld;
+	private final SkyRoyaleConfig skyRoyaleConfig;
 
 	private final IslandDeleter islandDeleter = new IslandDeleter();
 
-	public GameStartListener(Plugin plugin, IslandManager islandManager, SchematicHandler schematicHandler, LoadedSchematic islandSpawnBox, World islandWorld) {
+	public GameStartListener(Plugin plugin, IslandManager islandManager, SchematicHandler schematicHandler, LoadedSchematic islandSpawnBox, World islandWorld, SkyRoyaleConfig skyRoyaleConfig) {
 		this.plugin = plugin;
 		this.islandManager = islandManager;
 		this.schematicHandler = schematicHandler;
 		this.ISLAND_SPAWN_BOX_SCHEMATIC = islandSpawnBox;
 		this.islandWorld = islandWorld;
+		this.skyRoyaleConfig = skyRoyaleConfig;
 	}
 
 	@EventHandler
@@ -46,6 +50,16 @@ public class GameStartListener implements Listener {
 		islandWorld.setTime(12000 - (crumbleStartSeconds * 20));
 		islandWorld.setGameRule(GameRule.DO_DAYLIGHT_CYCLE, true);
 
-		plugin.getServer().getPluginManager().registerEvents(new GameRunningTimeListener(islandManager, crumbleStartSeconds), plugin);
+		// Set initial world border
+		SpawnedIsland furthestIsland = islandManager.getIslands().get(islandManager.getIslands().size() - 1);
+		int x = Math.abs(furthestIsland.getRelativeIslandCoordinates().x);
+		int z = Math.abs(furthestIsland.getRelativeIslandCoordinates().z);
+		int distance = x > z ? x : z;
+		distance += skyRoyaleConfig.getDistanceBetweenIslands();
+		distance *= 2;
+		islandWorld.getWorldBorder().setCenter(0.0, 0.0);
+		islandWorld.getWorldBorder().setSize(distance * 2);
+
+		plugin.getServer().getPluginManager().registerEvents(new GameRunningTimeListener(islandManager, islandWorld, skyRoyaleConfig), plugin);
 	}
 }
