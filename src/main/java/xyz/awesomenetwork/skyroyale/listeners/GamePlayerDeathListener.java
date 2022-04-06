@@ -16,6 +16,7 @@ public class GamePlayerDeathListener implements Listener {
 
 	@EventHandler
 	public void gamePlayerDeath(GamePlayerDeathEvent e) {
-		e.setDeathMessage(e.getDeathMessage() + ChatColor.GRAY + " (" + gameManager.getIngamePlayers().size() + " players remaining)");
+		int playersRemaining = gameManager.getIngamePlayers().size() - 1;
+		e.setDeathMessage(e.getDeathMessage() + ChatColor.GRAY + " (" + playersRemaining + " players remaining)");
 	}
 }
