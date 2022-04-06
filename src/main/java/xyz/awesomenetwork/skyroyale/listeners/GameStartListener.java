@@ -8,7 +8,6 @@ import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
-import org.bukkit.block.Chest;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -134,7 +133,7 @@ public class GameStartListener implements Listener {
 		plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, () -> {
 			// Place and populate chest
 			chestBlock.setBlockData(CHEST);
-			chestPopulator.populate(loot, 13, (Chest) chestBlock.getState()); // Max of 13 items because if the supply drops happen to land in the same chest there will always be space for everything (providing the player hasn't stored items there)
+			chestPopulator.populate(loot, 13, chestBlock); // Max of 13 items because if the supply drops happen to land in the same chest there will always be space for everything (providing the player hasn't stored items there)
 		}, waitTicks + ticksRequired);
 	}
 }
