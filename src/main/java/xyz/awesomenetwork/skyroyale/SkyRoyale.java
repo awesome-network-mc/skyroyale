@@ -15,6 +15,7 @@ import xyz.awesomenetwork.skyroyale.configs.ChestLootConfig;
 import xyz.awesomenetwork.skyroyale.configs.MapsConfig;
 import xyz.awesomenetwork.skyroyale.configs.SkyRoyaleConfig;
 import xyz.awesomenetwork.skyroyale.islands.IslandManager;
+import xyz.awesomenetwork.skyroyale.leaderboard.SkyRoyaleLeaderboard;
 import xyz.awesomenetwork.skyroyale.listeners.BlockBreakListener;
 import xyz.awesomenetwork.skyroyale.listeners.BlockPlaceListener;
 import xyz.awesomenetwork.skyroyale.listeners.EntityDamageListener;
@@ -71,11 +72,13 @@ public class SkyRoyale extends JavaPlugin {
             return;
         }
 
+        SkyRoyaleLeaderboard leaderboard = new SkyRoyaleLeaderboard(options.maxPlayers);
+
         getServer().getPluginManager().registerEvents(new BlockBreakListener(gameManager), this);
         getServer().getPluginManager().registerEvents(new BlockPlaceListener(skyRoyaleConfig.getBuildHeightLimit()), this);
         getServer().getPluginManager().registerEvents(new EntityDamageListener(gameManager), this);
         getServer().getPluginManager().registerEvents(new GameCountdownListener(islandManager, skyRoyaleConfig.getDefaultIslandGenerateSpeedTicks(), skyRoyaleConfig.getIslandGenerateSpeedMultiplierStart(), skyRoyaleConfig.getIslandGenerateSpeedMultiplierEnd()), this);
-        getServer().getPluginManager().registerEvents(new GamePlayerDeathListener(gameManager), this);
+        getServer().getPluginManager().registerEvents(new GamePlayerDeathListener(gameManager, leaderboard), this);
         getServer().getPluginManager().registerEvents(new GamePlayerJoinListener(islandManager), this);
         getServer().getPluginManager().registerEvents(new GamePlayerLeaveListener(islandManager), this);
         getServer().getPluginManager().registerEvents(new GamePlayerSpectateListener(islandWorld, skyRoyaleConfig.getIslandSpawnBoxY()), this);
