@@ -5,6 +5,7 @@ public class SkyRoyaleLeaderboard {
 
 	public SkyRoyaleLeaderboard(int size) {
 		this.leaderboard = new String[size];
+		for (int i = 0; i < size; i++) leaderboard[i] = null; // Initialise every index
 	}
 
 	public int getSize() {
