@@ -13,6 +13,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
 
+import xyz.awesomenetwork.minigametemplate.MinigameTemplate;
 import xyz.awesomenetwork.minigametemplate.events.GameStartEvent;
 import xyz.awesomenetwork.schematics.SchematicHandler;
 import xyz.awesomenetwork.schematics.SchematicPasteOptions;
@@ -78,6 +79,12 @@ public class GameStartListener implements Listener {
 
 		// Create task to start island crumbling and world border shrinking
 		plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, () -> {
+
+			plugin.getServer().broadcastMessage("");
+			plugin.getServer().broadcastMessage(MinigameTemplate.PREFIX_INFO + "The islands are crumbling!");
+			plugin.getServer().broadcastMessage(MinigameTemplate.PREFIX_INFO + "Get to the centre island!");
+			plugin.getServer().broadcastMessage("");
+
 			islandManager.crumbleIslands();
 			islandWorld.getWorldBorder().setSize(skyRoyaleConfig.getDistanceBetweenIslands() * 2, skyRoyaleConfig.getIslandCrumbleSpeed() / 20);
 		}, crumbleStartTicks);

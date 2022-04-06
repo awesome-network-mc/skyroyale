@@ -33,7 +33,7 @@ tiers:
       - serialised: '{"v":2975,"type":"SNOWBALL","amount":4}'
         weight: 1
       - serialised: '{"v":2975,"type":"FLINT_AND_STEEL"}'
-        weight: 3
+        weight: 2
       - serialised: '{"v":2975,"type":"STONE","amount":20}'
         weight: 3
       - serialised: '{"v":2975,"type":"STONE","amount":15}'
