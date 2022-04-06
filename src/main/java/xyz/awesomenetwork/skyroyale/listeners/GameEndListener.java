@@ -21,7 +21,7 @@ public class GameEndListener implements Listener {
 		server.broadcastMessage("Podium:");
 		for (int i = 0; i < 3; i++) {
 			String name;
-			if ((name = leaderboard.getPosition(i)) != null) server.broadcastMessage(" " + i + ": " + name);
+			if ((name = leaderboard.getPosition(i)) != null) server.broadcastMessage(" " + (i + 1) + ": " + name);
 		}
 	}
 }
