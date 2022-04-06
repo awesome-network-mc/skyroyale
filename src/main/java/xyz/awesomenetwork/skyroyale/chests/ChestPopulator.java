@@ -1,6 +1,7 @@
 package xyz.awesomenetwork.skyroyale.chests;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -12,6 +13,9 @@ import xyz.awesomenetwork.skyroyale.loot.LootTier;
 import xyz.awesomenetwork.skyroyale.loot.WeightedItem;
 
 public class ChestPopulator {
+	public void populate(LootTier loot, int itemsPerChest, Chest chest) {
+		populate(loot, itemsPerChest, Arrays.asList(chest));
+	}
 	public void populate(LootTier loot, int itemsPerChest, List<Chest> chests) {
 		int itemsSpawned = 0;
 		int chestIndex = 0;
