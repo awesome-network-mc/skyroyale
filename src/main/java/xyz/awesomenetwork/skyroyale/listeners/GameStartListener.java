@@ -1,7 +1,15 @@
 package xyz.awesomenetwork.skyroyale.listeners;
 
+import java.util.concurrent.ThreadLocalRandom;
+
 import org.bukkit.GameRule;
+import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.World;
+import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
+import org.bukkit.block.Chest;
+import org.bukkit.block.data.BlockData;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
@@ -10,10 +18,14 @@ import xyz.awesomenetwork.minigametemplate.events.GameStartEvent;
 import xyz.awesomenetwork.schematics.SchematicHandler;
 import xyz.awesomenetwork.schematics.SchematicPasteOptions;
 import xyz.awesomenetwork.schematics.data.LoadedSchematic;
+import xyz.awesomenetwork.skyroyale.chests.ChestPopulator;
+import xyz.awesomenetwork.skyroyale.configs.ChestLootConfig;
 import xyz.awesomenetwork.skyroyale.configs.SkyRoyaleConfig;
+import xyz.awesomenetwork.skyroyale.islands.IslandCoordinates;
 import xyz.awesomenetwork.skyroyale.islands.IslandDeleter;
 import xyz.awesomenetwork.skyroyale.islands.IslandManager;
 import xyz.awesomenetwork.skyroyale.islands.SpawnedIsland;
+import xyz.awesomenetwork.skyroyale.loot.LootTier;
 
 public class GameStartListener implements Listener {
 	private final Plugin plugin;
@@ -22,16 +34,21 @@ public class GameStartListener implements Listener {
 	private final LoadedSchematic ISLAND_SPAWN_BOX_SCHEMATIC;
 	private final World islandWorld;
 	private final SkyRoyaleConfig skyRoyaleConfig;
+	private final ChestLootConfig chestConfig;
 
 	private final IslandDeleter islandDeleter = new IslandDeleter();
+	private final BlockData BEDROCK = Material.BEDROCK.createBlockData();
+	private final BlockData CHEST = Material.CHEST.createBlockData();
+	private final ChestPopulator chestPopulator = new ChestPopulator();
 
-	public GameStartListener(Plugin plugin, IslandManager islandManager, SchematicHandler schematicHandler, LoadedSchematic islandSpawnBox, World islandWorld, SkyRoyaleConfig skyRoyaleConfig) {
+	public GameStartListener(Plugin plugin, IslandManager islandManager, SchematicHandler schematicHandler, LoadedSchematic islandSpawnBox, World islandWorld, SkyRoyaleConfig skyRoyaleConfig, ChestLootConfig chestConfig) {
 		this.plugin = plugin;
 		this.islandManager = islandManager;
 		this.schematicHandler = schematicHandler;
 		this.ISLAND_SPAWN_BOX_SCHEMATIC = islandSpawnBox;
 		this.islandWorld = islandWorld;
 		this.skyRoyaleConfig = skyRoyaleConfig;
+		this.chestConfig = chestConfig;
 	}
 
 	@EventHandler
@@ -66,12 +83,54 @@ public class GameStartListener implements Listener {
 		int supplyDrop1Ticks = (crumbleStartSeconds * 20) / 3;
 		int supplyDrop2Ticks = (int) ((crumbleStartSeconds * 20) / 1.5);
 
+		LootTier lootTier2 = chestConfig.getTier(2);
+		LootTier lootTier3 = chestConfig.getTier(3);
+		islandManager.getIslands().forEach(island -> {
+			int islandNumber = island.getIslandNumber();
+			scheduleSupplyDrop(lootTier2, islandNumber, supplyDrop1Ticks);
+			scheduleSupplyDrop(lootTier3, islandNumber, supplyDrop2Ticks);
+		});
+	}
+
+	private Location generateSupplyDropLocation(int islandNumber) {
+		int radius = skyRoyaleConfig.getIslandSupplyDropRadiusFromCentre();
+		IslandCoordinates coords = islandManager.getIslandAbsoluteCoordinates(islandNumber);
+		double x = coords.x + ThreadLocalRandom.current().nextDouble(-radius, radius + 1.0);
+		double z = coords.z + ThreadLocalRandom.current().nextDouble(-radius, radius + 1.0);
+		return new Location(islandWorld, x, skyRoyaleConfig.getBuildHeightLimit() + 3, z);
+	}
+
+	private void scheduleSupplyDrop(LootTier loot, int islandNumber, int waitTicks) {
+		final Location dropPoint = generateSupplyDropLocation(islandNumber);
+
 		plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, () -> {
+			islandManager.getIslands().forEach(island -> islandWorld.spawnFallingBlock(dropPoint, BEDROCK));
+		}, waitTicks);
 
-		}, supplyDrop1Ticks);
+		// Find ground block
+		Block block = new Location(islandWorld, dropPoint.getX(), skyRoyaleConfig.getIslandSpawnBoxY() - 1, dropPoint.getZ()).getBlock(); // Start at the spawn box centre instead of drop point because otherwise it would stop at the barrier blocks in the spawn box schematic
+		Block below;
+		while ((below = block.getRelative(BlockFace.DOWN, 1)).getType() == Material.AIR) {
+			block = below;
+		}
 
+		// Calculate amount of time required to reach ground
+		int ticksRequired = 0;
+		double velocity = 0;
+		double yCurrent = dropPoint.getBlockY();
+		int yEnd = block.getLocation().getBlockY();
+		while (yCurrent > yEnd) {
+			ticksRequired++;
+			velocity += 0.03;
+			if (velocity > 57.46) velocity = 57.46;
+			yCurrent -= velocity;
+		}
+
+		final Block chestBlock = block;
 		plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, () -> {
-
-		}, supplyDrop2Ticks);
+			// Place and populate chest
+			chestBlock.setBlockData(CHEST);
+			chestPopulator.populate(loot, 13, (Chest) chestBlock.getState()); // Max of 13 items because if the supply drops happen to land in the same chest there will always be space for everything (providing the player hasn't stored items there)
+		}, waitTicks + ticksRequired);
 	}
 }
