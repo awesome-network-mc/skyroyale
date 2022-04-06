@@ -57,6 +57,7 @@ public class SkyRoyale extends JavaPlugin {
         islandWorld.setGameRule(GameRule.DO_DAYLIGHT_CYCLE, false);
         islandWorld.setGameRule(GameRule.DO_WEATHER_CYCLE, false);
         islandWorld.setGameRule(GameRule.SPECTATORS_GENERATE_CHUNKS, false);
+        islandWorld.setSpawnLocation(0, 0, 0); // For compasses to find the centre island
 
         LoadedSchematic spawnBoxSchematic = null;
         IslandManager islandManager = null;
