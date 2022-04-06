@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
+import org.bukkit.block.Block;
 import org.bukkit.block.Chest;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -13,24 +14,26 @@ import xyz.awesomenetwork.skyroyale.loot.LootTier;
 import xyz.awesomenetwork.skyroyale.loot.WeightedItem;
 
 public class ChestPopulator {
-	public void populate(LootTier loot, int itemsPerChest, Chest chest) {
+	public void populate(LootTier loot, int itemsPerChest, Block chest) {
 		populate(loot, itemsPerChest, Arrays.asList(chest));
 	}
-	public void populate(LootTier loot, int itemsPerChest, List<Chest> chests) {
+	public void populate(LootTier loot, int itemsPerChest, List<Block> blocks) {
 		int itemsSpawned = 0;
 		int chestIndex = 0;
-		int totalChests = chests.size();
+		int totalChests = blocks.size();
+		Chest[] chests = new Chest[totalChests];
+		for (int i = 0; i < totalChests; i++) chests[i] = (Chest) blocks.get(i).getState();
 		int totalItems = totalChests * itemsPerChest;
 
 		for (WeightedItem item : loot.getGuaranteedItems().getItems()) {
-			populateRandomChestSlot(chests.get(chestIndex).getBlockInventory(), item.getItem());
+			populateRandomChestSlot(chests[chestIndex].getBlockInventory(), item.getItem());
 			itemsSpawned++;
 			chestIndex++;
 			if (chestIndex >= totalChests) chestIndex = 0;
 		}
 
 		for (int i = itemsSpawned; i < totalItems; i++) {
-			populateRandomChestSlot(chests.get(chestIndex).getBlockInventory(), loot.getRandomItems().getRandomItem());
+			populateRandomChestSlot(chests[chestIndex].getBlockInventory(), loot.getRandomItems().getRandomItem());
 			chestIndex++;
 			if (chestIndex >= totalChests) chestIndex = 0;
 		}

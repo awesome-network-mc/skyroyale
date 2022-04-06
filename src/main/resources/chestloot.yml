@@ -3,8 +3,6 @@ tiers:
     guaranteed:
       - serialised: '{"v":2975,"type":"WOODEN_AXE"}'
       - serialised: '{"v":2975,"type":"APPLE","amount":2}'
-      - serialised: '{"v":2975,"type":"APPLE","amount":1}'
-      - serialised: '{"v":2975,"type":"BAKED_POTATO"}'
       - serialised: '{"v":2975,"type":"BAKED_POTATO","amount":2}'
       - serialised: '{"v":2975,"type":"ANVIL"}'
       - serialised: '{"v":2975,"type":"WATER_BUCKET"}'
@@ -13,14 +11,18 @@ tiers:
       - serialised: '{"v":2975,"type":"WOODEN_PICKAXE"}'
       - serialised: '{"v":2975,"type":"SHIELD"}'
       - serialised: '{"v":2975,"type":"WOODEN_SWORD"}'
+      - serialised: '{"v":2975,"type":"COMPASS"}'
+      - serialised: '{"v":2975,"type":"COOKED_BEEF","amount":2}'
+      - serialised: '{"v":2975,"type":"ARROW","amount":2}'
+      - serialised: '{"v":2975,"type":"BOW"}'
     random:
       - serialised: '{"v":2975,"type":"LEATHER_HELMET"}'
         weight: 3
       - serialised: '{"v":2975,"type":"LEATHER_BOOTS"}'
         weight: 3
-      - serialised: '{"v":2975,"type":"OAK_LOG","amount":2}'
+      - serialised: '{"v":2975,"type":"OAK_LOG","amount":3}'
         weight: 1
-      - serialised: '{"v":2975,"type":"BIRCH_LOG","amount":2}'
+      - serialised: '{"v":2975,"type":"BIRCH_LOG","amount":3}'
         weight: 1
       - serialised: '{"v":2975,"type":"EGG","amount":3}'
         weight: 3
@@ -31,11 +33,21 @@ tiers:
       - serialised: '{"v":2975,"type":"SNOWBALL","amount":4}'
         weight: 1
       - serialised: '{"v":2975,"type":"FLINT_AND_STEEL"}'
-        weight: 2
-      - serialised: '{"v":2975,"type":"STONE","amount":24}'
         weight: 3
-      - serialised: '{"v":2975,"type":"STONE","amount":12}'
+      - serialised: '{"v":2975,"type":"STONE","amount":20}'
+        weight: 3
+      - serialised: '{"v":2975,"type":"STONE","amount":15}'
         weight: 2
+      - serialised: '{"v":2975,"type":"COOKED_BEEF","amount":3}'
+        weight: 2
+      - serialised: '{"v":2975,"type":"COOKED_BEEF","amount":4}'
+        weight: 1
+      - serialised: '{"v":2975,"type":"STONE_SWORD"}'
+        weight: 1
+      - serialised: '{"v":2975,"type":"ARROW","amount":1}'
+        weight: 3
+      - serialised: '{"v":2975,"type":"ARROW","amount":4}'
+        weight: 1
   2:
     guaranteed:
       - serialised: '{"v":2975,"type":"IRON_PICKAXE"}'
@@ -45,6 +57,8 @@ tiers:
       - serialised: '{"v":2975,"type":"COOKED_PORKCHOP","amount":2}'
       - serialised: '{"v":2975,"type":"CHAINMAIL_CHESTPLATE"}'
       - serialised: '{"v":2975,"type":"CHAINMAIL_LEGGINGS"}'
+      - serialised: '{"v":2975,"type":"LAPIS_LAZULI","amount":4}'
+      - serialised: '{"v":2975,"type":"IRON_SWORD"}'
     random:
       - serialised: '{"v":2975,"type":"COOKED_BEEF"}'
         weight: 3
@@ -60,6 +74,10 @@ tiers:
         weight: 1
       - serialised: '{"v":2975,"type":"CHAINMAIL_HELMET"}'
         weight: 4
+      - serialised: '{"v":2975,"type":"CHAINMAIL_CHESTPLATE"}'
+        weight: 2
+      - serialised: '{"v":2975,"type":"CHAINMAIL_LEGGINGS"}'
+        weight: 2
       - serialised: '{"v":2975,"type":"CHAINMAIL_BOOTS"}'
         weight: 4
       - serialised: '{"v":2975,"type":"GOLDEN_HELMET"}'
@@ -74,33 +92,29 @@ tiers:
         weight: 1
       - serialised: '{"v":2975,"type":"IRON_SHOVEL"}'
         weight: 1
-      - serialised: '{"v":2975,"type":"IRON_SWORD"}'
-        weight: 1
-      - serialised: '{"v":2975,"type":"GOLDEN_SWORD"}'
-        weight: 1
       - serialised: '{"v":2975,"type":"IRON_AXE"}'
         weight: 1
       - serialised: '{"v":2975,"type":"GOLDEN_AXE"}'
         weight: 1
-      - serialised: '{"v":2975,"type":"STONE","amount":32}'
+      - serialised: '{"v":2975,"type":"STONE","amount":10}'
         weight: 4
-      - serialised: '{"v":2975,"type":"STONE","amount":16}'
+      - serialised: '{"v":2975,"type":"STONE","amount":7}'
         weight: 6
-      - serialised: '{"v":2975,"type":"STONE","amount":8}'
+      - serialised: '{"v":2975,"type":"STONE","amount":3}'
         weight: 10
   3:
     guaranteed:
       - serialised: '{"v":2975,"type":"ELYTRA"}'
       - serialised: '{"v":2975,"type":"DIAMOND_PICKAXE"}'
-      - serialised: '{"v":2975,"type":"DIAMOND_SHOVEL"}'
+      - serialised: '{"v":2975,"type":"DIAMOND_SWORD"}'
       - serialised: '{"v":2975,"type":"ENDER_PEARL","amount":2}'
     random:
       - serialised: '{"v":2975,"type":"DIAMOND"}'
-        weight: 4
-      - serialised: '{"v":2975,"type":"DIAMOND","amount":2}'
-        weight: 2
-      - serialised: '{"v":2975,"type":"DIAMOND","amount":3}'
         weight: 1
+      - serialised: '{"v":2975,"type":"DIAMOND","amount":2}'
+        weight: 3
+      - serialised: '{"v":2975,"type":"DIAMOND","amount":3}'
+        weight: 2
       - serialised: '{"v":2975,"type":"ENDER_PEARL"}'
         weight: 3
       - serialised: '{"v":2975,"type":"ENDER_PEARL","amount":2}'
