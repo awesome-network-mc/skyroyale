@@ -1,6 +1,7 @@
 package xyz.awesomenetwork.skyroyale.listeners;
 
 import org.bukkit.ChatColor;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
@@ -24,7 +25,12 @@ public class GamePlayerDeathListener implements Listener {
 
 		leaderboard.setPosition(playersRemaining, e.getVictim().getName());
 		if (playersRemaining == 1) {
-			String winner = gameManager.getIngamePlayers().iterator().next().getName();
+			String winner = leaderboard.getPosition(1);
+			for (Player player : gameManager.getIngamePlayers()) {
+				if (player.getName().contentEquals(winner)) continue;
+				winner = player.getName();
+				break;
+			}
 			leaderboard.setPosition(0, winner);
 		}
 	}
