@@ -11,8 +11,10 @@ public class SkyRoyaleLeaderboard {
 		return leaderboard.length;
 	}
 
-	public void setPosition(int position, String playerName) {
+	public boolean setPosition(int position, String playerName) {
+		if (position >= leaderboard.length) return false;
 		leaderboard[position] = playerName;
+		return true;
 	}
 
 	public String getPosition(int position) {
