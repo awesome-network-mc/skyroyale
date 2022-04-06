@@ -15,6 +15,7 @@ public class SkyRoyaleConfig extends YamlConfigBase {
 	private final String ISLAND_ITEMS_PER_CHEST = "island_items_per_chest";
 	private final String ISLAND_CRUMBLE_SPEED = "island_crumble_speed";
 	private final String BUILD_HEIGHT_LIMIT = "build_height_limit";
+	private final String ISLAND_SUPPLY_DROP_RADIUS_FROM_CENTRE = "island_supply_drop_radius_from_centre";
 
 	public SkyRoyaleConfig(JavaPlugin plugin) {
 		super(plugin, "skyroyale.yml", true);
@@ -66,5 +67,9 @@ public class SkyRoyaleConfig extends YamlConfigBase {
 
 	public int getBuildHeightLimit() {
 		return getConfig().getInt(BUILD_HEIGHT_LIMIT);
+	}
+
+	public int getIslandSupplyDropRadiusFromCentre() {
+		return getConfig().getInt(ISLAND_SUPPLY_DROP_RADIUS_FROM_CENTRE);
 	}
 }

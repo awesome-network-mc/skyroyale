@@ -10,3 +10,4 @@ base_island_crumble_start_seconds: 30
 island_items_per_chest: 7
 island_crumble_speed: 3600
 build_height_limit: 122
+island_supply_drop_radius_from_centre: 1
