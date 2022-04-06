@@ -10,17 +10,14 @@ tiers:
       - serialised: '{"v":2975,"type":"WATER_BUCKET"}'
       - serialised: '{"v":2975,"type":"LAVA_BUCKET"}'
       - serialised: '{"v":2975,"type":"SPYGLASS"}'
-    random:
+      - serialised: '{"v":2975,"type":"WOODEN_PICKAXE"}'
+      - serialised: '{"v":2975,"type":"SHIELD"}'
       - serialised: '{"v":2975,"type":"WOODEN_SWORD"}'
-        weight: 3
+    random:
       - serialised: '{"v":2975,"type":"LEATHER_HELMET"}'
         weight: 3
       - serialised: '{"v":2975,"type":"LEATHER_BOOTS"}'
         weight: 3
-      - serialised: '{"v":2975,"type":"OAK_LOG"}'
-        weight: 6
-      - serialised: '{"v":2975,"type":"BIRCH_LOG"}'
-        weight: 6
       - serialised: '{"v":2975,"type":"OAK_LOG","amount":2}'
         weight: 1
       - serialised: '{"v":2975,"type":"BIRCH_LOG","amount":2}'
@@ -35,13 +32,19 @@ tiers:
         weight: 1
       - serialised: '{"v":2975,"type":"FLINT_AND_STEEL"}'
         weight: 2
-      - serialised: '{"v":2975,"type":"FLINT"}'
-        weight: 1
+      - serialised: '{"v":2975,"type":"STONE","amount":24}'
+        weight: 3
+      - serialised: '{"v":2975,"type":"STONE","amount":12}'
+        weight: 2
   2:
     guaranteed:
       - serialised: '{"v":2975,"type":"IRON_PICKAXE"}'
-      - serialised: '{"v":2975,"type":"SHIELD"}'
+      - serialised: '{"v":2975,"type":"GOLDEN_PICKAXE"}'
       - serialised: '{"v":2975,"type":"ENCHANTING_TABLE"}'
+      - serialised: '{"v":2975,"type":"COOKED_BEEF","amount":3}'
+      - serialised: '{"v":2975,"type":"COOKED_PORKCHOP","amount":2}'
+      - serialised: '{"v":2975,"type":"CHAINMAIL_CHESTPLATE"}'
+      - serialised: '{"v":2975,"type":"CHAINMAIL_LEGGINGS"}'
     random:
       - serialised: '{"v":2975,"type":"COOKED_BEEF"}'
         weight: 3
@@ -57,10 +60,6 @@ tiers:
         weight: 1
       - serialised: '{"v":2975,"type":"CHAINMAIL_HELMET"}'
         weight: 4
-      - serialised: '{"v":2975,"type":"CHAINMAIL_CHESTPLATE"}'
-        weight: 2
-      - serialised: '{"v":2975,"type":"CHAINMAIL_LEGGINGS"}'
-        weight: 2
       - serialised: '{"v":2975,"type":"CHAINMAIL_BOOTS"}'
         weight: 4
       - serialised: '{"v":2975,"type":"GOLDEN_HELMET"}'
@@ -83,15 +82,11 @@ tiers:
         weight: 1
       - serialised: '{"v":2975,"type":"GOLDEN_AXE"}'
         weight: 1
-      - serialised: '{"v":2975,"type":"IRON_PICKAXE"}'
-        weight: 1
-      - serialised: '{"v":2975,"type":"GOLDEN_PICKAXE"}'
-        weight: 1
-      - serialised: '{"v":2975,"type":"STONE","amount":16}'
+      - serialised: '{"v":2975,"type":"STONE","amount":32}'
         weight: 4
-      - serialised: '{"v":2975,"type":"STONE","amount":8}'
+      - serialised: '{"v":2975,"type":"STONE","amount":16}'
         weight: 6
-      - serialised: '{"v":2975,"type":"STONE","amount":4}'
+      - serialised: '{"v":2975,"type":"STONE","amount":8}'
         weight: 10
   3:
     guaranteed:
