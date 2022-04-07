@@ -4,6 +4,7 @@ import org.bukkit.Server;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
+import net.md_5.bungee.api.ChatColor;
 import xyz.awesomenetwork.minigametemplate.events.GameEndEvent;
 import xyz.awesomenetwork.skyroyale.leaderboard.SkyRoyaleLeaderboard;
 
@@ -18,10 +19,22 @@ public class GameEndListener implements Listener {
 
 	@EventHandler
 	public void gameEnd(GameEndEvent e) {
-		server.broadcastMessage("Podium:");
-		for (int i = 0; i < 3; i++) {
+		String[] podium = new String[] {
+			ChatColor.AQUA + "❶",
+			ChatColor.DARK_AQUA + "❷",
+			ChatColor.BLUE + "❸"
+		};
+
+		server.broadcastMessage(ChatColor.GRAY + "≡≡≡ " + ChatColor.WHITE + "LEADERBOARD" + ChatColor.GRAY + " ≡≡≡");
+		server.broadcastMessage("");
+		for (int i = 0; i < podium.length; i++) {
 			String name;
-			if ((name = leaderboard.getPosition(i)) != null) server.broadcastMessage(" " + (i + 1) + ": " + name);
+			if ((name = leaderboard.getPosition(i)) != null && i < podium.length) {
+				server.broadcastMessage(" " + podium[i] + "  " + name);
+				
+			}
 		}
+		server.broadcastMessage("");
+		server.broadcastMessage(ChatColor.GRAY + "≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡");
 	}
 }
