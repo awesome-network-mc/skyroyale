@@ -25,7 +25,8 @@ public class GameEndListener implements Listener {
 			ChatColor.BLUE + "❸"
 		};
 
-		server.broadcastMessage(ChatColor.GRAY + "≡≡≡ " + ChatColor.GOLD + "LEADERBOARD" + ChatColor.GRAY + " ≡≡≡");
+		server.broadcastMessage("");
+		server.broadcastMessage(ChatColor.GRAY + "≡≡≡ " + ChatColor.YELLOW + "LEADERBOARD" + ChatColor.GRAY + " ≡≡≡");
 		server.broadcastMessage("");
 		for (int i = 0; i < podium.length; i++) {
 			String name;
