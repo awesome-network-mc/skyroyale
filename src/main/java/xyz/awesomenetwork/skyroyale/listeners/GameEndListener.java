@@ -25,12 +25,12 @@ public class GameEndListener implements Listener {
 			ChatColor.BLUE + "❸"
 		};
 
-		server.broadcastMessage(ChatColor.GRAY + "≡≡≡ " + ChatColor.WHITE + "LEADERBOARD" + ChatColor.GRAY + " ≡≡≡");
+		server.broadcastMessage(ChatColor.GRAY + "≡≡≡ " + ChatColor.GOLD + "LEADERBOARD" + ChatColor.GRAY + " ≡≡≡");
 		server.broadcastMessage("");
 		for (int i = 0; i < podium.length; i++) {
 			String name;
 			if ((name = leaderboard.getPosition(i)) != null && i < podium.length) {
-				server.broadcastMessage(" " + podium[i] + "  " + name);
+				server.broadcastMessage(" " + podium[i] + "  " + ChatColor.WHITE + name);
 				
 			}
 		}
