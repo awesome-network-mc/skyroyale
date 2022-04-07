@@ -26,7 +26,7 @@ public class GamePlayerLeaveListener implements Listener {
 		if (gameManager.getGameState() == GameState.PREGAME || gameManager.getGameState() == GameState.COUNTDOWN) {
 			islandManager.unassignIsland(e.getPlayer());
 		} else if (gameManager.getGameState() == GameState.STARTED) {
-			int playersRemaining = gameManager.getIngamePlayers().size() - 1;
+			int playersRemaining = gameManager.getIngamePlayers().size();
 
 			leaderboard.setPosition(playersRemaining, e.getPlayer().getName());
 			if (playersRemaining == 1) {
