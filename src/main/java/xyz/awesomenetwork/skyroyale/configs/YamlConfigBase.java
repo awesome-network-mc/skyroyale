@@ -5,7 +5,7 @@ import java.io.File;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
-public class YamlConfigBase {
+public abstract class YamlConfigBase {
 	private final YamlConfiguration config;
 
 	public YamlConfigBase(JavaPlugin plugin, String configFileName) {
