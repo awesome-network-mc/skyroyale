@@ -24,11 +24,13 @@ public class GamePlayerLeaveListener implements Listener {
 	@EventHandler
 	public void gamePlayerLeave(GamePlayerLeaveEvent e) {
 		if (gameManager.getGameState() == GameState.PREGAME || gameManager.getGameState() == GameState.COUNTDOWN) {
+			// If the game hasn't started, unassign island from player and potentially reassign it to someone else
 			islandManager.unassignIsland(e.getPlayer());
 		} else if (gameManager.getGameState() == GameState.STARTED) {
+			// Leaving and dying are effectively the same thing when autoRespawn is false, so this captures all occurances when players should be set in the scoreboard
 			int playersRemaining = gameManager.getIngamePlayers().size();
-
 			leaderboard.setPosition(playersRemaining, e.getPlayer().getName());
+
 			if (playersRemaining == 1) {
 				String winner = leaderboard.getPosition(1);
 				for (Player player : gameManager.getIngamePlayers()) {

@@ -16,6 +16,7 @@ public class GamePlayerDeathListener implements Listener {
 
 	@EventHandler
 	public void gamePlayerDeath(GamePlayerDeathEvent e) {
+		// Modify death message to include amount of players remaining
 		e.setDeathMessage(e.getDeathMessage() + ChatColor.GRAY + " (" + (gameManager.getIngamePlayers().size() - 1) + "/" + gameManager.getOptions().maxPlayers + ")");
 	}
 }

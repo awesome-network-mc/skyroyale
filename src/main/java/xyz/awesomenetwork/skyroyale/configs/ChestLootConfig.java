@@ -45,13 +45,14 @@ public class ChestLootConfig extends YamlConfigBase {
 		ArrayList<WeightedItem> items = new ArrayList<>();
 		Gson gson = new Gson();
 
+		// Load all the items from this tier's section (should be "guaranteed" or "random")
 		ConfigurationSection tierSection = getConfig().getConfigurationSection(TIERS_KEY + "." + tier);
 		tierSection.getMapList(itemSection).forEach(itemInfo -> {
 			String serialisedItemJson = itemInfo.get(SERIALISED_KEY).toString();
-			Map<String, Object> serialisedItemMap = (Map<String, Object>) gson.fromJson(serialisedItemJson, Map.class);
+			Map<String, Object> serialisedItemMap = (Map<String, Object>) gson.fromJson(serialisedItemJson, Map.class); // Serialised item is stored as JSON because it's so much nicer than YAML
 			
 			ItemStack item = ItemStack.deserialize(serialisedItemMap);
-			int weight = itemInfo.containsKey(WEIGHT_KEY) ? Integer.parseInt(itemInfo.get(WEIGHT_KEY).toString()) : 1;
+			int weight = itemInfo.containsKey(WEIGHT_KEY) ? Integer.parseInt(itemInfo.get(WEIGHT_KEY).toString()) : 1; // Parse int here because maven fails to compile otherwise, it really doesn't like converting Object to int but very intermittently
 
 			items.add(new WeightedItem(item, weight));
 		});

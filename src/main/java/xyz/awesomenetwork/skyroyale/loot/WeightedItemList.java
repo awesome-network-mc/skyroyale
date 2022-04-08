@@ -15,6 +15,7 @@ public class WeightedItemList {
 	public WeightedItemList(List<WeightedItem> weightedItems) {
 		this.weightedItems = weightedItems;
 
+		// I feel like there's a better way to calculate item weights than this but this works for now
 		weightedItems.forEach(item -> {
 			calculatedItemsSize += item.getWeight();
 			for (int i = 0; i < item.getWeight(); i++) calculatedItems.add(item.getItem());

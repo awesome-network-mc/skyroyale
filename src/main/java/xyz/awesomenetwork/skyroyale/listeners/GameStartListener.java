@@ -63,6 +63,12 @@ public class GameStartListener implements Listener {
 		this.islandCrumbleBar = islandCrumbleBar;
 		this.gameManager = gameManager;
 
+		/*
+		 * Pre-calculate how many ticks it roughly takes for a falling block to fall X blocks
+		 * This is used because while I can track when falling blocks land successfully, I cannot track when they land on a half slab and break into an item
+		 * Therefore there is a scheduled task alongside the falling block that estimates when the falling block will land, then places a chest at its pre-determined landing point
+		 * It may get messy if players place blocks in the time between falling block start and finish but this was good enough for 95% of cases - plus the chest will always spawn regardless
+		*/
 		int ticks = 0;
 		double y = 0;
 		double velocity = 0;
@@ -80,8 +86,10 @@ public class GameStartListener implements Listener {
 
 	@EventHandler
 	public void gameStart(GameStartEvent e) {
+		// Populate island chests at start of game so players can't use hacks or spectator mode to peek in the chests
 		islandManager.populateAllIslandChests(chestConfig.getTier(1));
 
+		// Remove spawn box schematics so players fall
 		islandManager.getIslands().forEach(island -> {
 			schematicHandler.pasteSchematic(new SchematicPasteOptions(ISLAND_SPAWN_BOX_SCHEMATIC, islandManager.getIslandSpawnBoxCentre(island.getIslandNumber()), 0, islandDeleter, 0));
 		});
@@ -91,10 +99,10 @@ public class GameStartListener implements Listener {
 		int crumbleStartTicks = (int) (Math.floor(21.3 + Math.sqrt(100 * (amountOfIslands - 1)) + (2.545 / (2 * Math.pow(10, 15))) * Math.pow(amountOfIslands, 8) - (13 / (104 * Math.pow(10, 6))) * Math.pow(amountOfIslands, 4)) + 29) * 20;
 
 		// When time hits 12000, islands start to crumble as it turns to night
-		islandWorld.setTime(12000 - (crumbleStartTicks));
+		islandWorld.setTime(12000 - crumbleStartTicks);
 		islandWorld.setGameRule(GameRule.DO_DAYLIGHT_CYCLE, true);
 
-		// Set initial world border
+		// Set initial world border to just outside the furthest island
 		SpawnedIsland furthestIsland = islandManager.getIslands().get(islandManager.getIslands().size() - 1);
 		int x = Math.abs(furthestIsland.getRelativeIslandCoordinates().x);
 		int z = Math.abs(furthestIsland.getRelativeIslandCoordinates().z);
@@ -111,6 +119,8 @@ public class GameStartListener implements Listener {
 			gameManager.getIngamePlayers().forEach(player -> player.sendTitle(title, subtitle, 5, 50, 10));
 
 			islandManager.crumbleIslands();
+
+			// World border should finish just outside the centre island
 			islandWorld.getWorldBorder().setSize(skyRoyaleConfig.getDistanceBetweenIslands() * 2, skyRoyaleConfig.getIslandCrumbleSpeed() / 20);
 		}, crumbleStartTicks);
 
@@ -156,7 +166,7 @@ public class GameStartListener implements Listener {
 			// Start falling block
 			islandWorld.spawnFallingBlock(dropPoint, BEDROCK);
 
-			// Notify player of supply drop
+			// Notify player of supply drop (title must have space or the subtitle doesn't show)
 			island.getAssignedPlayer().sendTitle(" ", SUPPLY_DROP_SUBTITLE, 0, 40, 10);
 		});
 	}

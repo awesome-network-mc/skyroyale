@@ -17,6 +17,7 @@ public class MapsConfig extends YamlConfigBase {
 	public MapsConfig(JavaPlugin plugin) {
 		super(plugin, "maps.yml", true);
 
+		// Load maps from disk
 		getConfig().getConfigurationSection("").getKeys(false).forEach(mapName -> {
 			ConfigurationSection mapConfig = getConfig().getConfigurationSection(mapName);
 			List<String> schematics = mapConfig.getStringList(MAP_SCHEMATICS);

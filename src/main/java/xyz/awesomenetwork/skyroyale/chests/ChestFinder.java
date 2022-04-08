@@ -19,6 +19,7 @@ public class ChestFinder implements SchematicPasteCallback {
 
 	@Override
 	public void postPaste(String pasteId, Block block, Location pasteCentre, Location absoluteLocation, LocationNoWorld relativeLocation) {
+		// When an island is pasting, this finds the chests and adds them to the spawned island instance
 		if (block.getType() == Material.CHEST) {
 			islandManager.getIsland(islandNumber).addChest(block);
 		}
