@@ -18,6 +18,7 @@ import xyz.awesomenetwork.skyroyale.islands.IslandManager;
 import xyz.awesomenetwork.skyroyale.leaderboard.SkyRoyaleLeaderboard;
 import xyz.awesomenetwork.skyroyale.listeners.BlockBreakListener;
 import xyz.awesomenetwork.skyroyale.listeners.BlockPlaceListener;
+import xyz.awesomenetwork.skyroyale.listeners.EntityChangeBlockListener;
 import xyz.awesomenetwork.skyroyale.listeners.EntityDamageListener;
 import xyz.awesomenetwork.skyroyale.listeners.GameCountdownListener;
 import xyz.awesomenetwork.skyroyale.listeners.GameEndListener;
@@ -77,6 +78,7 @@ public class SkyRoyale extends JavaPlugin {
 
         getServer().getPluginManager().registerEvents(new BlockBreakListener(gameManager), this);
         getServer().getPluginManager().registerEvents(new BlockPlaceListener(skyRoyaleConfig.getBuildHeightLimit()), this);
+        getServer().getPluginManager().registerEvents(new EntityChangeBlockListener(), this);
         getServer().getPluginManager().registerEvents(new EntityDamageListener(gameManager), this);
         getServer().getPluginManager().registerEvents(new GameCountdownListener(islandManager, skyRoyaleConfig.getDefaultIslandGenerateSpeedTicks(), skyRoyaleConfig.getIslandGenerateSpeedMultiplierStart(), skyRoyaleConfig.getIslandGenerateSpeedMultiplierEnd()), this);
         getServer().getPluginManager().registerEvents(new GameEndListener(getServer(), leaderboard), this);

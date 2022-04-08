@@ -48,7 +48,7 @@ public class ChestLootConfig extends YamlConfigBase {
 		ConfigurationSection tierSection = getConfig().getConfigurationSection(TIERS_KEY + "." + tier);
 		tierSection.getMapList(itemSection).forEach(itemInfo -> {
 			String serialisedItemJson = itemInfo.get(SERIALISED_KEY).toString();
-			Map<String, Object> serialisedItemMap = gson.fromJson(serialisedItemJson, Map.class);
+			Map<String, Object> serialisedItemMap = (Map<String, Object>) gson.fromJson(serialisedItemJson, Map.class);
 			
 			ItemStack item = ItemStack.deserialize(serialisedItemMap);
 			int weight = itemInfo.containsKey(WEIGHT_KEY) ? (int) itemInfo.get(WEIGHT_KEY) : 1;

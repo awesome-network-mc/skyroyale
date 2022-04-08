@@ -1,5 +1,6 @@
 package xyz.awesomenetwork.skyroyale.listeners;
 
+import java.util.HashMap;
 import java.util.concurrent.ThreadLocalRandom;
 
 import org.bukkit.GameRule;
@@ -12,6 +13,7 @@ import org.bukkit.block.data.BlockData;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.scheduler.BukkitScheduler;
 
 import xyz.awesomenetwork.minigametemplate.MinigameTemplate;
 import xyz.awesomenetwork.minigametemplate.events.GameStartEvent;
@@ -35,11 +37,13 @@ public class GameStartListener implements Listener {
 	private final World islandWorld;
 	private final SkyRoyaleConfig skyRoyaleConfig;
 	private final ChestLootConfig chestConfig;
+	private final BukkitScheduler scheduler;
 
 	private final IslandDeleter islandDeleter = new IslandDeleter();
 	private final BlockData BEDROCK = Material.BEDROCK.createBlockData();
 	private final BlockData CHEST = Material.CHEST.createBlockData();
 	private final ChestPopulator chestPopulator = new ChestPopulator();
+	private final HashMap<Integer, Integer> blockFallSpeed = new HashMap<>(); // <Block fall distance, Ticks required to fall that distance>
 
 	public GameStartListener(Plugin plugin, IslandManager islandManager, SchematicHandler schematicHandler, LoadedSchematic islandSpawnBox, World islandWorld, SkyRoyaleConfig skyRoyaleConfig, ChestLootConfig chestConfig) {
 		this.plugin = plugin;
@@ -49,6 +53,21 @@ public class GameStartListener implements Listener {
 		this.islandWorld = islandWorld;
 		this.skyRoyaleConfig = skyRoyaleConfig;
 		this.chestConfig = chestConfig;
+		this.scheduler = plugin.getServer().getScheduler();
+
+		int ticks = 0;
+		double y = 0;
+		double velocity = 0;
+		while (y < islandWorld.getMaxHeight()) {
+			ticks++;
+			velocity += 0.03;
+			if (velocity > 57.46) velocity = 57.46; // Roughly the terminal velocity of a falling block
+
+			y += velocity;
+
+			int blockY = (int) Math.floor(y);
+			if (!blockFallSpeed.containsKey(blockY)) blockFallSpeed.put(blockY, ticks);
+		}
 	}
 
 	@EventHandler
@@ -78,7 +97,7 @@ public class GameStartListener implements Listener {
 		islandWorld.getWorldBorder().setSize(distance * 2);
 
 		// Create task to start island crumbling and world border shrinking
-		plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, () -> {
+		scheduler.scheduleSyncDelayedTask(plugin, () -> {
 
 			plugin.getServer().broadcastMessage("");
 			plugin.getServer().broadcastMessage(MinigameTemplate.PREFIX_INFO + "The islands are crumbling!");
@@ -90,16 +109,8 @@ public class GameStartListener implements Listener {
 		}, crumbleStartTicks);
 
 		// Create scheduled tasks for supply drops
-		int supplyDrop1Ticks = (crumbleStartTicks) / 3;
-		int supplyDrop2Ticks = (int) ((crumbleStartTicks) / 1.5);
-
-		LootTier lootTier2 = chestConfig.getTier(2);
-		LootTier lootTier3 = chestConfig.getTier(3);
-		islandManager.getIslands().forEach(island -> {
-			int islandNumber = island.getIslandNumber();
-			scheduleSupplyDrop(lootTier2, islandNumber, supplyDrop1Ticks);
-			scheduleSupplyDrop(lootTier3, islandNumber, supplyDrop2Ticks);
-		});
+		scheduler.scheduleSyncDelayedTask(plugin, () -> scheduleSupplyDrop(chestConfig.getTier(2)), crumbleStartTicks / 3);
+		scheduler.scheduleSyncDelayedTask(plugin, () -> scheduleSupplyDrop(chestConfig.getTier(3)), (int) (crumbleStartTicks / 1.5));
 	}
 
 	private Location generateSupplyDropLocation(int islandNumber) {
@@ -110,37 +121,30 @@ public class GameStartListener implements Listener {
 		return new Location(islandWorld, x, skyRoyaleConfig.getBuildHeightLimit() + 3, z);
 	}
 
-	private void scheduleSupplyDrop(LootTier loot, int islandNumber, int waitTicks) {
-		final Location dropPoint = generateSupplyDropLocation(islandNumber);
+	private void scheduleSupplyDrop(LootTier loot) {
+		islandManager.getIslands().forEach(island -> {
 
-		plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, () -> {
-			islandManager.getIslands().forEach(island -> islandWorld.spawnFallingBlock(dropPoint, BEDROCK));
-		}, waitTicks);
+			// Generate random point for supply drop to fall from
+			Location dropPoint = generateSupplyDropLocation(island.getIslandNumber());
 
-		// Find ground block
-		Block block = new Location(islandWorld, dropPoint.getX(), skyRoyaleConfig.getIslandSpawnBoxY() - 1, dropPoint.getZ()).getBlock(); // Start at the spawn box centre instead of drop point because otherwise it would stop at the barrier blocks in the spawn box schematic
-		Block below;
-		while ((below = block.getRelative(BlockFace.DOWN, 1)).getType() == Material.AIR) {
-			block = below;
-		}
+			// Find ground block below
+			int fallDistance = 0;
+			Block chestBlock = dropPoint.getBlock();
+			Block below;
+			while ((below = chestBlock.getRelative(BlockFace.DOWN, 1)).getType() == Material.AIR) {
+				chestBlock = below;
+				fallDistance++;
+			}
 
-		// Calculate amount of time required to reach ground
-		int ticksRequired = 0;
-		double velocity = 0;
-		double yCurrent = dropPoint.getBlockY();
-		int yEnd = block.getLocation().getBlockY();
-		while (yCurrent > yEnd) {
-			ticksRequired++;
-			velocity += 0.03;
-			if (velocity > 57.46) velocity = 57.46;
-			yCurrent -= velocity;
-		}
+			// Schedule chest to appear and populate when falling block hits the ground
+			final Block finalChestBlock = chestBlock;
+			scheduler.scheduleSyncDelayedTask(plugin, () -> {
+				finalChestBlock.setBlockData(CHEST);
+				chestPopulator.populate(loot, 13, finalChestBlock);
+			}, blockFallSpeed.get(fallDistance));
 
-		final Block chestBlock = block;
-		plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, () -> {
-			// Place and populate chest
-			chestBlock.setBlockData(CHEST);
-			chestPopulator.populate(loot, 13, chestBlock); // Max of 13 items because if the supply drops happen to land in the same chest there will always be space for everything (providing the player hasn't stored items there)
-		}, waitTicks + ticksRequired);
+			// Start falling block
+			islandWorld.spawnFallingBlock(dropPoint, BEDROCK);
+		});
 	}
 }
