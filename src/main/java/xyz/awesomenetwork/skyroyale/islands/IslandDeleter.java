@@ -12,6 +12,7 @@ public class IslandDeleter implements SchematicPasteCallback {
 
 	@Override
 	public boolean prePaste(String pasteId, BlockData blockdata, Location pasteCentre, Location absoluteLocation, LocationNoWorld relativeLocation) {
+		// Delete block then stop the schematic from pasting its normal block
 		absoluteLocation.getWorld().setBlockData(absoluteLocation, AIR);
 		return false;
 	}

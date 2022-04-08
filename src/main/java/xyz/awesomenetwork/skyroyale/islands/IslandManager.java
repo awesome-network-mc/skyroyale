@@ -16,7 +16,6 @@ import xyz.awesomenetwork.schematics.SchematicPasteOptions;
 import xyz.awesomenetwork.schematics.data.LoadedSchematic;
 import xyz.awesomenetwork.skyroyale.chests.ChestFinder;
 import xyz.awesomenetwork.skyroyale.chests.ChestPopulator;
-import xyz.awesomenetwork.skyroyale.configs.ChestLootConfig;
 import xyz.awesomenetwork.skyroyale.configs.SkyRoyaleConfig;
 import xyz.awesomenetwork.skyroyale.loot.LootTier;
 import xyz.awesomenetwork.skyroyale.maps.MapManager;
@@ -27,22 +26,22 @@ public class IslandManager {
 	private final MapManager mapManager;
 	private final World islandWorld;
 	private final LoadedSchematic ISLAND_SPAWN_BOX_SCHEMATIC;
-	private final ChestLootConfig chestConfig;
 	private final SkyRoyaleConfig skyRoyaleConfig;
 
 	private final IslandCoordinates[] islandCoordinates;
 	private final ArrayList<SpawnedIsland> islands = new ArrayList<>();
 	private final HashMap<Player, Integer> assignedIslands = new HashMap<>();
 
-	public IslandManager(GameManager gameManager, SchematicHandler schematics, MapManager mapManager, World islandWorld, LoadedSchematic spawnBoxSchematic, ChestLootConfig chestConfig, SkyRoyaleConfig skyRoyaleConfig) throws IOException {
+	public IslandManager(GameManager gameManager, SchematicHandler schematics, MapManager mapManager, World islandWorld, LoadedSchematic spawnBoxSchematic, SkyRoyaleConfig skyRoyaleConfig) throws IOException {
 		this.gameManager = gameManager;
 		this.schematics = schematics;
 		this.mapManager = mapManager;
 		this.islandWorld = islandWorld;
 		ISLAND_SPAWN_BOX_SCHEMATIC = spawnBoxSchematic;
-		this.chestConfig = chestConfig;
 		this.skyRoyaleConfig = skyRoyaleConfig;
 
+		// Pre-alculate island positions in a spiral pattern around the centre island
+		// I tried writing a formula for this but decided this is faster and easier
 		int maxPlayers = gameManager.getOptions().maxPlayers;
 		islandCoordinates = new IslandCoordinates[maxPlayers];
 		IslandDirection direction = IslandDirection.NEGATIVE_X;
@@ -165,10 +164,8 @@ public class IslandManager {
 		return islands;
 	}
 
-	public void populateAllIslandChests(int tier) {
+	public void populateAllIslandChests(LootTier loot) {
 		ChestPopulator chestPopulator = new ChestPopulator();
-
-		LootTier loot = chestConfig.getTier(tier);
 		int itemsPerChest = skyRoyaleConfig.getItemsPerChest();
 		islands.forEach(island -> chestPopulator.populate(loot, itemsPerChest, island.getChests()));
 	}

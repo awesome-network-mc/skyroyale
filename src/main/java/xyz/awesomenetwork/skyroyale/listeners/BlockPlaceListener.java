@@ -13,6 +13,7 @@ public class BlockPlaceListener implements Listener {
 
 	@EventHandler
 	public void blockPlace(BlockPlaceEvent e) {
+		// Don't allow placing blocks above the height limit - mostly because of the supply drop spawn positions
 		e.setCancelled(e.getBlock().getLocation().getBlockY() >= buildHeightLimit);
 	}
 }

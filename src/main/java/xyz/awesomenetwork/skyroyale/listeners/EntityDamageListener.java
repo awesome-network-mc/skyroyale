@@ -18,6 +18,7 @@ public class EntityDamageListener implements Listener {
 
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void entityDamage(EntityDamageEvent e) {
+		// Cancel fall damage as the game starts
 		if (e.getCause() != DamageCause.FALL) return;
 		if (gameManager.getGameState() != GameState.STARTED) return;
 		if (gameManager.getGameRunningTimeInSeconds() > 2) return;

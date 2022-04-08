@@ -20,6 +20,7 @@ public class GamePlayerSpectateListener implements Listener {
 	public void gamePlayerSpectate(GamePlayerSpectateEvent e) {
 		Player player = e.getPlayer();
 		player.setGameMode(GameMode.SPECTATOR);
+		// If player is in the void then teleport them back up for convenience
 		if (player.getLocation().getBlockY() < 0) e.getPlayer().teleport(spawnLocation);
 	}
 }

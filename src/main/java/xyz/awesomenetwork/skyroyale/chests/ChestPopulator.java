@@ -18,6 +18,11 @@ public class ChestPopulator {
 		populate(loot, itemsPerChest, Arrays.asList(chest));
 	}
 	public void populate(LootTier loot, int itemsPerChest, List<Block> blocks) {
+		/*
+		 * Iterates through each chest to spread the items evenly
+		 * Puts "guaranteed" items in the chests first
+		*/
+		
 		int itemsSpawned = 0;
 		int chestIndex = 0;
 		int totalChests = blocks.size();

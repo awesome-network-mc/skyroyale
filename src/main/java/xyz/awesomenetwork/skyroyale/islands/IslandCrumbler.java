@@ -21,6 +21,7 @@ public class IslandCrumbler implements SchematicPasteCallback {
 		// Only show 50% of the falling blocks for framerate reasons
 		if (ThreadLocalRandom.current().nextInt(2) == 0) world.spawnFallingBlock(absoluteLocation, blockData);
 
+		// Cancel block pasting
 		return false;
 	}
 }

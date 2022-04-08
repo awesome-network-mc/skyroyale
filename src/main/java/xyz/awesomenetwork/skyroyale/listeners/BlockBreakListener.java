@@ -16,6 +16,7 @@ public class BlockBreakListener implements Listener {
 	
 	@EventHandler
 	public void blockBreak(BlockBreakEvent e) {
+		// Cancel block breaking before the game starts
 		e.setCancelled(gameManager.getGameState() == GameState.PREGAME || gameManager.getGameState() == GameState.COUNTDOWN);
 	}
 }

@@ -13,8 +13,11 @@ public class MapManager {
 
 	public MapManager(MapsConfig mapsConfig, SchematicHandler schematicHandler) throws IOException {
 		MapInfo[] maps = mapsConfig.getMaps().toArray(new MapInfo[0]);
+
+		// Pick a random map to use
 		loadedMap = maps[ThreadLocalRandom.current().nextInt(maps.length)];
 
+		// Load all schematics from disk
 		islandSchematics = new LoadedSchematic[loadedMap.getIslandSchematics().size()];
 		for (int i = 0; i < islandSchematics.length; i++) {
 			islandSchematics[i] = schematicHandler.loadSchematic(loadedMap.getIslandSchematics().get(i));
