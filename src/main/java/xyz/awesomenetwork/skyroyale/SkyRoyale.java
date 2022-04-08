@@ -40,6 +40,7 @@ public class SkyRoyale extends JavaPlugin {
         MinigameTemplate game = this.getServer().getServicesManager().getRegistration(MinigameTemplate.class).getProvider();
         SchematicHandler schematicHandler = getServer().getServicesManager().getRegistration(SchematicHandler.class).getProvider();
 
+        // Initialise minigame template
         GameManagerOptions options = new GameManagerOptions.GameManagerOptionsBuilder().build();
         GameManager gameManager = game.createGameManager(options);
 
@@ -71,7 +72,7 @@ public class SkyRoyale extends JavaPlugin {
         IslandManager islandManager = null;
         try {
             spawnBoxSchematic = schematicHandler.loadSchematic(skyRoyaleConfig.getIslandSpawnBoxSchematicName());
-            islandManager = new IslandManager(gameManager, schematicHandler, mapManager, islandWorld, spawnBoxSchematic, chestConfig, skyRoyaleConfig);
+            islandManager = new IslandManager(gameManager, schematicHandler, mapManager, islandWorld, spawnBoxSchematic, skyRoyaleConfig);
         } catch (IOException e) {
             e.printStackTrace();
             getServer().shutdown();
