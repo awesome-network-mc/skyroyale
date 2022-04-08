@@ -17,6 +17,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitScheduler;
 
+import xyz.awesomenetwork.minigametemplate.GameManager;
 import xyz.awesomenetwork.minigametemplate.events.GameStartEvent;
 import xyz.awesomenetwork.schematics.SchematicHandler;
 import xyz.awesomenetwork.schematics.SchematicPasteOptions;
@@ -40,6 +41,7 @@ public class GameStartListener implements Listener {
 	private final ChestLootConfig chestConfig;
 	private final BukkitScheduler scheduler;
 	private final BossBar islandCrumbleBar;
+	private final GameManager gameManager;
 
 	private final IslandDeleter islandDeleter = new IslandDeleter();
 	private final BlockData BEDROCK = Material.BEDROCK.createBlockData();
@@ -47,7 +49,7 @@ public class GameStartListener implements Listener {
 	private final ChestPopulator chestPopulator = new ChestPopulator();
 	private final HashMap<Integer, Integer> blockFallSpeed = new HashMap<>(); // <Block fall distance, Ticks required to fall that distance>
 
-	public GameStartListener(Plugin plugin, IslandManager islandManager, SchematicHandler schematicHandler, LoadedSchematic islandSpawnBox, World islandWorld, SkyRoyaleConfig skyRoyaleConfig, ChestLootConfig chestConfig, BossBar islandCrumbleBar) {
+	public GameStartListener(Plugin plugin, IslandManager islandManager, SchematicHandler schematicHandler, LoadedSchematic islandSpawnBox, World islandWorld, SkyRoyaleConfig skyRoyaleConfig, ChestLootConfig chestConfig, BossBar islandCrumbleBar, GameManager gameManager) {
 		this.plugin = plugin;
 		this.islandManager = islandManager;
 		this.schematicHandler = schematicHandler;
@@ -57,6 +59,7 @@ public class GameStartListener implements Listener {
 		this.chestConfig = chestConfig;
 		this.scheduler = plugin.getServer().getScheduler();
 		this.islandCrumbleBar = islandCrumbleBar;
+		this.gameManager = gameManager;
 
 		int ticks = 0;
 		double y = 0;
@@ -103,7 +106,7 @@ public class GameStartListener implements Listener {
 		scheduler.scheduleSyncDelayedTask(plugin, () -> {
 			String title = ChatColor.GOLD + "The islands are crumbling!";
 			String subtitle = "Get to the centre island!";
-			plugin.getServer().getOnlinePlayers().forEach(player -> player.sendTitle(title, subtitle, 5, 50, 10));
+			gameManager.getIngamePlayers().forEach(player -> player.sendTitle(title, subtitle, 5, 50, 10));
 
 			islandManager.crumbleIslands();
 			islandWorld.getWorldBorder().setSize(skyRoyaleConfig.getDistanceBetweenIslands() * 2, skyRoyaleConfig.getIslandCrumbleSpeed() / 20);
