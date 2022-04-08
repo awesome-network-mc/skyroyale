@@ -3,6 +3,7 @@ package xyz.awesomenetwork.skyroyale.listeners;
 import java.util.HashMap;
 import java.util.concurrent.ThreadLocalRandom;
 
+import org.bukkit.ChatColor;
 import org.bukkit.GameRule;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -16,7 +17,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitScheduler;
 
-import xyz.awesomenetwork.minigametemplate.MinigameTemplate;
 import xyz.awesomenetwork.minigametemplate.events.GameStartEvent;
 import xyz.awesomenetwork.schematics.SchematicHandler;
 import xyz.awesomenetwork.schematics.SchematicPasteOptions;
@@ -101,11 +101,9 @@ public class GameStartListener implements Listener {
 
 		// Create task to start island crumbling and world border shrinking
 		scheduler.scheduleSyncDelayedTask(plugin, () -> {
-
-			plugin.getServer().broadcastMessage("");
-			plugin.getServer().broadcastMessage(MinigameTemplate.PREFIX_INFO + "The islands are crumbling!");
-			plugin.getServer().broadcastMessage(MinigameTemplate.PREFIX_INFO + "Get to the centre island!");
-			plugin.getServer().broadcastMessage("");
+			String title = ChatColor.GOLD + "The islands are crumbling!";
+			String subtitle = "Get to the centre island!";
+			plugin.getServer().getOnlinePlayers().forEach(player -> player.sendTitle(title, subtitle, 5, 50, 10));
 
 			islandManager.crumbleIslands();
 			islandWorld.getWorldBorder().setSize(skyRoyaleConfig.getDistanceBetweenIslands() * 2, skyRoyaleConfig.getIslandCrumbleSpeed() / 20);
