@@ -3,6 +3,7 @@ package xyz.awesomenetwork.skyroyale.listeners;
 import java.util.HashMap;
 import java.util.concurrent.ThreadLocalRandom;
 
+import org.bukkit.ChatColor;
 import org.bukkit.GameRule;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -10,12 +11,13 @@ import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.BlockData;
+import org.bukkit.boss.BossBar;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitScheduler;
 
-import xyz.awesomenetwork.minigametemplate.MinigameTemplate;
+import xyz.awesomenetwork.minigametemplate.GameManager;
 import xyz.awesomenetwork.minigametemplate.events.GameStartEvent;
 import xyz.awesomenetwork.schematics.SchematicHandler;
 import xyz.awesomenetwork.schematics.SchematicPasteOptions;
@@ -38,6 +40,8 @@ public class GameStartListener implements Listener {
 	private final SkyRoyaleConfig skyRoyaleConfig;
 	private final ChestLootConfig chestConfig;
 	private final BukkitScheduler scheduler;
+	private final BossBar islandCrumbleBar;
+	private final GameManager gameManager;
 
 	private final IslandDeleter islandDeleter = new IslandDeleter();
 	private final BlockData BEDROCK = Material.BEDROCK.createBlockData();
@@ -45,7 +49,9 @@ public class GameStartListener implements Listener {
 	private final ChestPopulator chestPopulator = new ChestPopulator();
 	private final HashMap<Integer, Integer> blockFallSpeed = new HashMap<>(); // <Block fall distance, Ticks required to fall that distance>
 
-	public GameStartListener(Plugin plugin, IslandManager islandManager, SchematicHandler schematicHandler, LoadedSchematic islandSpawnBox, World islandWorld, SkyRoyaleConfig skyRoyaleConfig, ChestLootConfig chestConfig) {
+	private final String SUPPLY_DROP_SUBTITLE = "Supply drops are falling!";
+
+	public GameStartListener(Plugin plugin, IslandManager islandManager, SchematicHandler schematicHandler, LoadedSchematic islandSpawnBox, World islandWorld, SkyRoyaleConfig skyRoyaleConfig, ChestLootConfig chestConfig, BossBar islandCrumbleBar, GameManager gameManager) {
 		this.plugin = plugin;
 		this.islandManager = islandManager;
 		this.schematicHandler = schematicHandler;
@@ -54,6 +60,8 @@ public class GameStartListener implements Listener {
 		this.skyRoyaleConfig = skyRoyaleConfig;
 		this.chestConfig = chestConfig;
 		this.scheduler = plugin.getServer().getScheduler();
+		this.islandCrumbleBar = islandCrumbleBar;
+		this.gameManager = gameManager;
 
 		int ticks = 0;
 		double y = 0;
@@ -98,11 +106,9 @@ public class GameStartListener implements Listener {
 
 		// Create task to start island crumbling and world border shrinking
 		scheduler.scheduleSyncDelayedTask(plugin, () -> {
-
-			plugin.getServer().broadcastMessage("");
-			plugin.getServer().broadcastMessage(MinigameTemplate.PREFIX_INFO + "The islands are crumbling!");
-			plugin.getServer().broadcastMessage(MinigameTemplate.PREFIX_INFO + "Get to the centre island!");
-			plugin.getServer().broadcastMessage("");
+			String title = ChatColor.GOLD + "The islands are crumbling!";
+			String subtitle = "Get to the centre island!";
+			gameManager.getIngamePlayers().forEach(player -> player.sendTitle(title, subtitle, 5, 50, 10));
 
 			islandManager.crumbleIslands();
 			islandWorld.getWorldBorder().setSize(skyRoyaleConfig.getDistanceBetweenIslands() * 2, skyRoyaleConfig.getIslandCrumbleSpeed() / 20);
@@ -111,6 +117,10 @@ public class GameStartListener implements Listener {
 		// Create scheduled tasks for supply drops
 		scheduler.scheduleSyncDelayedTask(plugin, () -> scheduleSupplyDrop(chestConfig.getTier(2)), crumbleStartTicks / 3);
 		scheduler.scheduleSyncDelayedTask(plugin, () -> scheduleSupplyDrop(chestConfig.getTier(3)), (int) (crumbleStartTicks / 1.5));
+
+		// Start island crumble timer boss bar
+		islandCrumbleBar.setVisible(true);
+		plugin.getServer().getPluginManager().registerEvents(new GameRunningTimeListener(islandCrumbleBar, crumbleStartTicks / 20), plugin);
 	}
 
 	private Location generateSupplyDropLocation(int islandNumber) {
@@ -145,6 +155,9 @@ public class GameStartListener implements Listener {
 
 			// Start falling block
 			islandWorld.spawnFallingBlock(dropPoint, BEDROCK);
+
+			// Notify player of supply drop
+			island.getAssignedPlayer().sendTitle(" ", SUPPLY_DROP_SUBTITLE, 0, 40, 10);
 		});
 	}
 }

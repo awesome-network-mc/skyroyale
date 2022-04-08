@@ -51,7 +51,7 @@ public class ChestLootConfig extends YamlConfigBase {
 			Map<String, Object> serialisedItemMap = (Map<String, Object>) gson.fromJson(serialisedItemJson, Map.class);
 			
 			ItemStack item = ItemStack.deserialize(serialisedItemMap);
-			int weight = itemInfo.containsKey(WEIGHT_KEY) ? (int) itemInfo.get(WEIGHT_KEY) : 1;
+			int weight = itemInfo.containsKey(WEIGHT_KEY) ? Integer.parseInt(itemInfo.get(WEIGHT_KEY).toString()) : 1;
 
 			items.add(new WeightedItem(item, weight));
 		});
