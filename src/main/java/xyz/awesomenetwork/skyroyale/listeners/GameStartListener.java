@@ -49,6 +49,8 @@ public class GameStartListener implements Listener {
 	private final ChestPopulator chestPopulator = new ChestPopulator();
 	private final HashMap<Integer, Integer> blockFallSpeed = new HashMap<>(); // <Block fall distance, Ticks required to fall that distance>
 
+	private final String SUPPLY_DROP_SUBTITLE = ChatColor.GRAY + "Supply drops are falling!";
+
 	public GameStartListener(Plugin plugin, IslandManager islandManager, SchematicHandler schematicHandler, LoadedSchematic islandSpawnBox, World islandWorld, SkyRoyaleConfig skyRoyaleConfig, ChestLootConfig chestConfig, BossBar islandCrumbleBar, GameManager gameManager) {
 		this.plugin = plugin;
 		this.islandManager = islandManager;
@@ -153,6 +155,9 @@ public class GameStartListener implements Listener {
 
 			// Start falling block
 			islandWorld.spawnFallingBlock(dropPoint, BEDROCK);
+
+			// Tell player supply drops are falling
+			if (island.getAssignedPlayer().isOnline()) island.getAssignedPlayer().sendTitle("", SUPPLY_DROP_SUBTITLE, 0, 40, 10);
 		});
 	}
 }
