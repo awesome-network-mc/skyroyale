@@ -10,6 +10,7 @@ import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.BlockData;
+import org.bukkit.boss.BossBar;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
@@ -38,6 +39,7 @@ public class GameStartListener implements Listener {
 	private final SkyRoyaleConfig skyRoyaleConfig;
 	private final ChestLootConfig chestConfig;
 	private final BukkitScheduler scheduler;
+	private final BossBar islandCrumbleBar;
 
 	private final IslandDeleter islandDeleter = new IslandDeleter();
 	private final BlockData BEDROCK = Material.BEDROCK.createBlockData();
@@ -45,7 +47,7 @@ public class GameStartListener implements Listener {
 	private final ChestPopulator chestPopulator = new ChestPopulator();
 	private final HashMap<Integer, Integer> blockFallSpeed = new HashMap<>(); // <Block fall distance, Ticks required to fall that distance>
 
-	public GameStartListener(Plugin plugin, IslandManager islandManager, SchematicHandler schematicHandler, LoadedSchematic islandSpawnBox, World islandWorld, SkyRoyaleConfig skyRoyaleConfig, ChestLootConfig chestConfig) {
+	public GameStartListener(Plugin plugin, IslandManager islandManager, SchematicHandler schematicHandler, LoadedSchematic islandSpawnBox, World islandWorld, SkyRoyaleConfig skyRoyaleConfig, ChestLootConfig chestConfig, BossBar islandCrumbleBar) {
 		this.plugin = plugin;
 		this.islandManager = islandManager;
 		this.schematicHandler = schematicHandler;
@@ -54,6 +56,7 @@ public class GameStartListener implements Listener {
 		this.skyRoyaleConfig = skyRoyaleConfig;
 		this.chestConfig = chestConfig;
 		this.scheduler = plugin.getServer().getScheduler();
+		this.islandCrumbleBar = islandCrumbleBar;
 
 		int ticks = 0;
 		double y = 0;
@@ -111,6 +114,10 @@ public class GameStartListener implements Listener {
 		// Create scheduled tasks for supply drops
 		scheduler.scheduleSyncDelayedTask(plugin, () -> scheduleSupplyDrop(chestConfig.getTier(2)), crumbleStartTicks / 3);
 		scheduler.scheduleSyncDelayedTask(plugin, () -> scheduleSupplyDrop(chestConfig.getTier(3)), (int) (crumbleStartTicks / 1.5));
+
+		// Start island crumble timer boss bar
+		islandCrumbleBar.setVisible(true);
+		plugin.getServer().getPluginManager().registerEvents(new GameRunningTimeListener(islandCrumbleBar, crumbleStartTicks / 20), plugin);
 	}
 
 	private Location generateSupplyDropLocation(int islandNumber) {

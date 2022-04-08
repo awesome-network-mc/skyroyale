@@ -4,6 +4,9 @@ import java.io.IOException;
 
 import org.bukkit.GameRule;
 import org.bukkit.World;
+import org.bukkit.boss.BarColor;
+import org.bukkit.boss.BarStyle;
+import org.bukkit.boss.BossBar;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import xyz.awesomenetwork.minigametemplate.GameManager;
@@ -28,6 +31,7 @@ import xyz.awesomenetwork.skyroyale.listeners.GamePlayerLeaveListener;
 import xyz.awesomenetwork.skyroyale.listeners.GamePlayerSpectateListener;
 import xyz.awesomenetwork.skyroyale.listeners.GameStartListener;
 import xyz.awesomenetwork.skyroyale.listeners.ItemSpawnListener;
+import xyz.awesomenetwork.skyroyale.listeners.PlayerJoinListener;
 import xyz.awesomenetwork.skyroyale.maps.MapManager;
 
 public class SkyRoyale extends JavaPlugin {
@@ -74,6 +78,9 @@ public class SkyRoyale extends JavaPlugin {
             return;
         }
 
+        BossBar islandCrumbleBar = getServer().createBossBar("", BarColor.RED, BarStyle.SEGMENTED_6);
+        islandCrumbleBar.setVisible(false);
+
         SkyRoyaleLeaderboard leaderboard = new SkyRoyaleLeaderboard(options.maxPlayers);
 
         getServer().getPluginManager().registerEvents(new BlockBreakListener(gameManager), this);
@@ -86,7 +93,8 @@ public class SkyRoyale extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new GamePlayerJoinListener(islandManager), this);
         getServer().getPluginManager().registerEvents(new GamePlayerLeaveListener(gameManager, islandManager, leaderboard), this);
         getServer().getPluginManager().registerEvents(new GamePlayerSpectateListener(islandWorld, skyRoyaleConfig.getIslandSpawnBoxY()), this);
-        getServer().getPluginManager().registerEvents(new GameStartListener(this, islandManager, schematicHandler, spawnBoxSchematic, islandWorld, skyRoyaleConfig, chestConfig), this);
+        getServer().getPluginManager().registerEvents(new GameStartListener(this, islandManager, schematicHandler, spawnBoxSchematic, islandWorld, skyRoyaleConfig, chestConfig, islandCrumbleBar), this);
         getServer().getPluginManager().registerEvents(new ItemSpawnListener(), this);
+        getServer().getPluginManager().registerEvents(new PlayerJoinListener(islandCrumbleBar), this);
     }
 }
