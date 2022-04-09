@@ -3,6 +3,7 @@ package xyz.awesomenetwork.skyroyale.configs;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -12,7 +13,7 @@ import xyz.awesomenetwork.skyroyale.maps.MapInfo;
 public class MapsConfig extends YamlConfigBase {
 	private final String MAP_SCHEMATICS = "schematics";
 
-	private final HashMap<String, MapInfo> maps = new HashMap<>();
+	private final Map<String, MapInfo> maps = new HashMap<>();
 
 	public MapsConfig(JavaPlugin plugin) {
 		super(plugin, "maps.yml", true);

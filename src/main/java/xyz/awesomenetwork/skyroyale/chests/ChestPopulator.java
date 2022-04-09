@@ -46,7 +46,7 @@ public class ChestPopulator {
 
 	public void populateRandomChestSlot(Inventory inventory, ItemStack item) {
 		// Find available chest slots
-		ArrayList<Integer> availableSlots = new ArrayList<Integer>();
+		List<Integer> availableSlots = new ArrayList<Integer>();
 		int i = 0;
 		for (ItemStack inventoryItem : inventory.getStorageContents()) {
 			if (inventoryItem == null) availableSlots.add(i);
