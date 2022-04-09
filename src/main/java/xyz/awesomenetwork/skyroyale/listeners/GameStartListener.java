@@ -36,7 +36,7 @@ public class GameStartListener implements Listener {
 	private final Plugin plugin;
 	private final IslandManager islandManager;
 	private final SchematicHandler schematicHandler;
-	private final LoadedSchematic ISLAND_SPAWN_BOX_SCHEMATIC;
+	private final LoadedSchematic islandSpawnBox;
 	private final World islandWorld;
 	private final SkyRoyaleConfig skyRoyaleConfig;
 	private final ChestLootConfig chestConfig;
@@ -56,7 +56,7 @@ public class GameStartListener implements Listener {
 		this.plugin = plugin;
 		this.islandManager = islandManager;
 		this.schematicHandler = schematicHandler;
-		this.ISLAND_SPAWN_BOX_SCHEMATIC = islandSpawnBox;
+		this.islandSpawnBox = islandSpawnBox;
 		this.islandWorld = islandWorld;
 		this.skyRoyaleConfig = skyRoyaleConfig;
 		this.chestConfig = chestConfig;
@@ -92,7 +92,7 @@ public class GameStartListener implements Listener {
 
 		// Remove spawn box schematics so players fall
 		islandManager.getIslands().forEach(island -> {
-			schematicHandler.pasteSchematic(new SchematicPasteOptions(ISLAND_SPAWN_BOX_SCHEMATIC, islandManager.getIslandSpawnBoxCentre(island.getIslandNumber()), 0, islandDeleter, 0));
+			schematicHandler.pasteSchematic(new SchematicPasteOptions(islandSpawnBox, islandManager.getIslandSpawnBoxCentre(island.getIslandNumber()), 0, islandDeleter, 0));
 		});
 
 		int amountOfIslands = islandManager.getIslands().size();
