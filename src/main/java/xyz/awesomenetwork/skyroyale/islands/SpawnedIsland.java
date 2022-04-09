@@ -16,7 +16,7 @@ public class SpawnedIsland {
 	private final LoadedSchematic schematic;
 	private final Player player;
 	private final SchematicPasteOptions schematicPasteOptions;
-	private final ArrayList<Block> chests = new ArrayList<>();
+	private final List<Block> chests = new ArrayList<>();
 
 	public SpawnedIsland(int id, int rotation, IslandCoordinates relativeCoordinates, LoadedSchematic schematic, Player player, SchematicPasteOptions schematicPasteOptions) {
 		this.id = id;

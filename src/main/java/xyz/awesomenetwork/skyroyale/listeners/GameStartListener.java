@@ -1,6 +1,7 @@
 package xyz.awesomenetwork.skyroyale.listeners;
 
 import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
 
 import org.bukkit.ChatColor;
@@ -47,7 +48,7 @@ public class GameStartListener implements Listener {
 	private final BlockData BEDROCK = Material.BEDROCK.createBlockData();
 	private final BlockData CHEST = Material.CHEST.createBlockData();
 	private final ChestPopulator chestPopulator = new ChestPopulator();
-	private final HashMap<Integer, Integer> blockFallSpeed = new HashMap<>(); // <Block fall distance, Ticks required to fall that distance>
+	private final Map<Integer, Integer> blockFallSpeed = new HashMap<>(); // <Block fall distance, Ticks required to fall that distance>
 
 	private final String SUPPLY_DROP_SUBTITLE = "Supply drops are falling!";
 

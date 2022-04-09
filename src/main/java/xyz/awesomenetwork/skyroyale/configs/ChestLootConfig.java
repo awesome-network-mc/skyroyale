@@ -2,6 +2,7 @@ package xyz.awesomenetwork.skyroyale.configs;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import com.google.gson.Gson;
@@ -22,7 +23,7 @@ public class ChestLootConfig extends YamlConfigBase {
 	private final String GUARANTEED_ITEMS_KEY = "guaranteed";
 	private final String RANDOM_ITEMS_KEY = "random";
 
-	private final HashMap<Integer, HashMap<String, WeightedItemList>> weightedItems = new HashMap<>();
+	private final Map<Integer, Map<String, WeightedItemList>> weightedItems = new HashMap<>();
 
 	public ChestLootConfig(JavaPlugin plugin) {
 		super(plugin, "chestloot.yml", true);
@@ -42,7 +43,7 @@ public class ChestLootConfig extends YamlConfigBase {
 	}
 
 	private WeightedItemList readConfigSection(int tier, String itemSection) {
-		ArrayList<WeightedItem> items = new ArrayList<>();
+		List<WeightedItem> items = new ArrayList<>();
 		Gson gson = new Gson();
 
 		// Load all the items from this tier's section (should be "guaranteed" or "random")

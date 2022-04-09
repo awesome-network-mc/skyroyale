@@ -8,7 +8,7 @@ import org.bukkit.inventory.ItemStack;
 
 public class WeightedItemList {
 	private final List<WeightedItem> weightedItems;
-	private final ArrayList<ItemStack> calculatedItems = new ArrayList<>();
+	private final List<ItemStack> calculatedItems = new ArrayList<>();
 
 	private int calculatedItemsSize;
 

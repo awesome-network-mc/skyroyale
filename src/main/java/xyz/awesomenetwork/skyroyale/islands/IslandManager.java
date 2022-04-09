@@ -3,6 +3,8 @@ package xyz.awesomenetwork.skyroyale.islands;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
 
 import org.bukkit.Location;
@@ -29,8 +31,8 @@ public class IslandManager {
 	private final SkyRoyaleConfig skyRoyaleConfig;
 
 	private final IslandCoordinates[] islandCoordinates;
-	private final ArrayList<SpawnedIsland> islands = new ArrayList<>();
-	private final HashMap<Player, Integer> assignedIslands = new HashMap<>();
+	private final List<SpawnedIsland> islands = new ArrayList<>();
+	private final Map<Player, Integer> assignedIslands = new HashMap<>();
 
 	public IslandManager(GameManager gameManager, SchematicHandler schematics, MapManager mapManager, World islandWorld, LoadedSchematic spawnBoxSchematic, SkyRoyaleConfig skyRoyaleConfig) throws IOException {
 		this.gameManager = gameManager;
@@ -160,7 +162,7 @@ public class IslandManager {
 		islands.forEach(island -> island.getSchematicPasteOptions().setTicksToComplete(ticksToComplete));
 	}
 
-	public ArrayList<SpawnedIsland> getIslands() {
+	public List<SpawnedIsland> getIslands() {
 		return islands;
 	}
 
