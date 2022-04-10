@@ -1,0 +1,1 @@
+{"name":"island_spawn_box","blocks":[{"x":0,"y":-1,"z":0,"serialised":"minecraft:glass"},{"x":-1,"y":0,"z":0,"serialised":"minecraft:barrier"},{"x":0,"y":0,"z":1,"serialised":"minecraft:barrier"},{"x":1,"y":0,"z":0,"serialised":"minecraft:barrier"},{"x":0,"y":0,"z":-1,"serialised":"minecraft:barrier"},{"x":0,"y":2,"z":0,"serialised":"minecraft:barrier"}]}

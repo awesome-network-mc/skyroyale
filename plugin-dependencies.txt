@@ -1,0 +1,4 @@
+xyz.awesomenetwork:schematics:2.1.0
+xyz.awesomenetwork:autostop:1.0.0
+xyz.awesomenetwork:void-generator:0.2.0
+xyz.awesomenetwork:minigametemplate:1.0.1
