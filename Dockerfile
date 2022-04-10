@@ -28,7 +28,9 @@ RUN wget https://papermc.io/api/v2/projects/paper/versions/1.18.2/builds/283/dow
 RUN cd ~/server && java -XX:MaxRAMPercentage=85.0 -jar server.jar
 RUN rm -rf ~/server/plugins/autostop*.jar ~/build
 
+USER root
 RUN apk del maven wget
 
+USER awesomenetwork
 WORKDIR /home/awesomenetwork/server
 ENTRYPOINT ["java", "-XX:MaxRAMPercentage=85.0", "-jar", "server.jar"]
