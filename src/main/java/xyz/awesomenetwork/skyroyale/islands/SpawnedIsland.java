@@ -14,9 +14,10 @@ public class SpawnedIsland {
 	private final int rotation;
 	private final IslandCoordinates relativeCoordinates;
 	private final LoadedSchematic schematic;
-	private final Player player;
 	private final SchematicPasteOptions schematicPasteOptions;
 	private final List<Block> chests = new ArrayList<>();
+
+	private Player player;
 
 	public SpawnedIsland(int id, int rotation, IslandCoordinates relativeCoordinates, LoadedSchematic schematic, Player player, SchematicPasteOptions schematicPasteOptions) {
 		this.id = id;
@@ -45,6 +46,10 @@ public class SpawnedIsland {
 
 	public Player getAssignedPlayer() {
 		return player;
+	}
+
+	public void assignPlayer(Player player) {
+		this.player = player;
 	}
 
 	public SchematicPasteOptions getSchematicPasteOptions() {
