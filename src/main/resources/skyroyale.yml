@@ -4,10 +4,11 @@ island_generate_speed_multiplier_end: 3
 island_y: 100
 island_spawn_box_y: 112
 island_spawn_box_schematic: "island_spawn_box"
+beacon_schematic: "beacon"
 distance_between_islands: 18
 island_world_name: "skyroyale_islands"
 base_island_crumble_start_seconds: 30
 island_items_per_chest: 15
 island_crumble_speed: 3600
-build_height_limit: 122
+build_height_limit: 112
 island_supply_drop_radius_from_centre: 1
