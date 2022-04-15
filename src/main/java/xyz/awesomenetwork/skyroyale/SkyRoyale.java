@@ -69,9 +69,11 @@ public class SkyRoyale extends JavaPlugin {
         islandWorld.setSpawnLocation(0, 0, 0); // For compasses to find the centre island
 
         LoadedSchematic spawnBoxSchematic = null;
+        LoadedSchematic beaconSchematic = null;
         IslandManager islandManager = null;
         try {
             spawnBoxSchematic = schematicHandler.loadSchematic(skyRoyaleConfig.getIslandSpawnBoxSchematicName());
+            beaconSchematic = schematicHandler.loadSchematic(skyRoyaleConfig.getBeaconSchematicName());
             islandManager = new IslandManager(gameManager, schematicHandler, mapManager, islandWorld, spawnBoxSchematic, skyRoyaleConfig);
         } catch (IOException e) {
             e.printStackTrace();
@@ -84,7 +86,7 @@ public class SkyRoyale extends JavaPlugin {
 
         SkyRoyaleLeaderboard leaderboard = new SkyRoyaleLeaderboard(options.maxPlayers);
 
-        getServer().getPluginManager().registerEvents(new BlockBreakListener(gameManager), this);
+        getServer().getPluginManager().registerEvents(new BlockBreakListener(gameManager, skyRoyaleConfig.getBuildHeightLimit()), this);
         getServer().getPluginManager().registerEvents(new BlockPlaceListener(skyRoyaleConfig.getBuildHeightLimit()), this);
         getServer().getPluginManager().registerEvents(new EntityChangeBlockListener(), this);
         getServer().getPluginManager().registerEvents(new EntityDamageListener(gameManager), this);
@@ -94,7 +96,7 @@ public class SkyRoyale extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new GamePlayerJoinListener(islandManager), this);
         getServer().getPluginManager().registerEvents(new GamePlayerLeaveListener(gameManager, islandManager, leaderboard), this);
         getServer().getPluginManager().registerEvents(new GamePlayerSpectateListener(islandWorld, skyRoyaleConfig.getIslandSpawnBoxY()), this);
-        getServer().getPluginManager().registerEvents(new GameStartListener(this, islandManager, schematicHandler, spawnBoxSchematic, islandWorld, skyRoyaleConfig, chestConfig, islandCrumbleBar, gameManager), this);
+        getServer().getPluginManager().registerEvents(new GameStartListener(this, islandManager, schematicHandler, spawnBoxSchematic, islandWorld, skyRoyaleConfig, chestConfig, islandCrumbleBar, gameManager, beaconSchematic), this);
         getServer().getPluginManager().registerEvents(new ItemSpawnListener(), this);
         getServer().getPluginManager().registerEvents(new PlayerJoinListener(islandCrumbleBar), this);
     }
