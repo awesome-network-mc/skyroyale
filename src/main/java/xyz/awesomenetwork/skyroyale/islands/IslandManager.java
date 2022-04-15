@@ -27,19 +27,19 @@ public class IslandManager {
 	private final SchematicHandler schematics;
 	private final MapManager mapManager;
 	private final World islandWorld;
-	private final LoadedSchematic ISLAND_SPAWN_BOX_SCHEMATIC;
+	private final LoadedSchematic islandSpawnBox;
 	private final SkyRoyaleConfig skyRoyaleConfig;
 
 	private final IslandCoordinates[] islandCoordinates;
 	private final List<SpawnedIsland> islands = new ArrayList<>();
 	private final Map<Player, Integer> assignedIslands = new HashMap<>();
 
-	public IslandManager(GameManager gameManager, SchematicHandler schematics, MapManager mapManager, World islandWorld, LoadedSchematic spawnBoxSchematic, SkyRoyaleConfig skyRoyaleConfig) throws IOException {
+	public IslandManager(GameManager gameManager, SchematicHandler schematics, MapManager mapManager, World islandWorld, LoadedSchematic islandSpawnBox, SkyRoyaleConfig skyRoyaleConfig) throws IOException {
 		this.gameManager = gameManager;
 		this.schematics = schematics;
 		this.mapManager = mapManager;
 		this.islandWorld = islandWorld;
-		ISLAND_SPAWN_BOX_SCHEMATIC = spawnBoxSchematic;
+		this.islandSpawnBox = islandSpawnBox;
 		this.skyRoyaleConfig = skyRoyaleConfig;
 
 		// Pre-alculate island positions in a spiral pattern around the centre island
@@ -98,7 +98,7 @@ public class IslandManager {
 
 		// Create spawn box for player above island
 		Location spawnBoxCentre = getIslandSpawnBoxCentre(islandNumber);
-		schematics.pasteSchematic(ISLAND_SPAWN_BOX_SCHEMATIC, spawnBoxCentre);
+		schematics.pasteSchematic(islandSpawnBox, spawnBoxCentre);
 
 		// Teleport player to spawn box
 		player.teleport(spawnBoxCentre);
@@ -127,23 +127,23 @@ public class IslandManager {
 		// Don't unassign if the game has started so we're able to crumble the island properly
 		if (gameManager.getGameState() == GameState.STARTED || gameManager.getGameState() == GameState.ENDED) return false;
 
-		// Unassign player from empty island
-		assignedIslands.remove(islands.get(islandNumber).getAssignedPlayer());
-
-		// Reassign final island player to empty island
+		// Remove final island schematics
 		int finalIndex = islands.size() - 1;
 		SpawnedIsland finalIsland = islands.get(finalIndex);
-		islands.set(islandNumber, finalIsland);
-		finalIsland.getAssignedPlayer().teleport(getIslandSpawnBoxCentre(islandNumber));
-		assignedIslands.put(finalIsland.getAssignedPlayer(), islandNumber);
-		islands.remove(finalIndex);
-
-		// Cancel final island paste
 		finalIsland.getSchematicPasteOptions().setCancelled(true);
-
-		// Remove final island schematics
 		schematics.pasteSchematic(new SchematicPasteOptions(finalIsland.getSchematic(), getIslandCentre(finalIndex), finalIsland.getRotation(), new IslandDeleter(), 0));
-		schematics.pasteSchematic(new SchematicPasteOptions(ISLAND_SPAWN_BOX_SCHEMATIC, getIslandSpawnBoxCentre(finalIndex), 0, new IslandDeleter(), 0));
+		schematics.pasteSchematic(new SchematicPasteOptions(islandSpawnBox, getIslandSpawnBoxCentre(finalIndex), 0, new IslandDeleter(), 0));
+
+		// Reassign final island player to the now empty island
+		Player finalIslandPlayer = finalIsland.getAssignedPlayer();
+		finalIslandPlayer.teleport(getIslandSpawnBoxCentre(islandNumber));
+		Player emptyIslandPlayer = islands.get(islandNumber).getAssignedPlayer();
+		assignedIslands.put(finalIslandPlayer, islandNumber);
+		assignedIslands.remove(emptyIslandPlayer);
+		islands.get(islandNumber).assignPlayer(finalIslandPlayer);
+
+		// Clear up final island
+		islands.remove(finalIndex);
 
 		return true;
 	}
