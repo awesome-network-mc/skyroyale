@@ -36,7 +36,7 @@ public class GameStartListener implements Listener {
 	private final Plugin plugin;
 	private final IslandManager islandManager;
 	private final SchematicHandler schematicHandler;
-	private final LoadedSchematic islandSpawnBox;
+	private final LoadedSchematic islandSpawnBox, beacon;
 	private final World islandWorld;
 	private final SkyRoyaleConfig skyRoyaleConfig;
 	private final ChestLootConfig chestConfig;
@@ -52,7 +52,7 @@ public class GameStartListener implements Listener {
 
 	private final String SUPPLY_DROP_SUBTITLE = "Supply drops are falling!";
 
-	public GameStartListener(Plugin plugin, IslandManager islandManager, SchematicHandler schematicHandler, LoadedSchematic islandSpawnBox, World islandWorld, SkyRoyaleConfig skyRoyaleConfig, ChestLootConfig chestConfig, BossBar islandCrumbleBar, GameManager gameManager) {
+	public GameStartListener(Plugin plugin, IslandManager islandManager, SchematicHandler schematicHandler, LoadedSchematic islandSpawnBox, World islandWorld, SkyRoyaleConfig skyRoyaleConfig, ChestLootConfig chestConfig, BossBar islandCrumbleBar, GameManager gameManager, LoadedSchematic beacon) {
 		this.plugin = plugin;
 		this.islandManager = islandManager;
 		this.schematicHandler = schematicHandler;
@@ -63,6 +63,7 @@ public class GameStartListener implements Listener {
 		this.scheduler = plugin.getServer().getScheduler();
 		this.islandCrumbleBar = islandCrumbleBar;
 		this.gameManager = gameManager;
+		this.beacon = beacon;
 
 		/*
 		 * Pre-calculate how many ticks it roughly takes for a falling block to fall X blocks
@@ -123,6 +124,10 @@ public class GameStartListener implements Listener {
 
 			// World border should finish just outside the centre island
 			islandWorld.getWorldBorder().setSize(skyRoyaleConfig.getDistanceBetweenIslands() * 2, skyRoyaleConfig.getIslandCrumbleSpeed() / 20);
+
+			// Paste beacon schematic above centre island
+			IslandCoordinates islandCentre = islandManager.getIslandAbsoluteCoordinates(0);
+			schematicHandler.pasteSchematic(beacon, new Location(islandWorld, islandCentre.x, skyRoyaleConfig.getBuildHeightLimit(), islandCentre.z));
 		}, crumbleStartTicks);
 
 		// Create scheduled tasks for supply drops

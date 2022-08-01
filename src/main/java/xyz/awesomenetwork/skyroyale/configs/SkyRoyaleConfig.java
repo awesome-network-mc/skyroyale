@@ -9,6 +9,7 @@ public class SkyRoyaleConfig extends YamlConfigBase {
 	private final String ISLAND_Y = "island_y";
 	private final String ISLAND_SPAWN_BOX_Y = "island_spawn_box_y";
 	private final String ISLAND_SPAWN_BOX_SCHEMATIC = "island_spawn_box_schematic";
+	private final String BEACON_SCHEMATIC = "beacon_schematic";
 	private final String DISTANCE_BETWEEN_ISLANDS = "distance_between_islands";
 	private final String ISLAND_WORLD_NAME = "island_world_name";
 	private final String BASE_ISLAND_CRUMBLE_START_SECONDS = "base_island_crumble_start_seconds";
@@ -43,6 +44,10 @@ public class SkyRoyaleConfig extends YamlConfigBase {
 
 	public String getIslandSpawnBoxSchematicName() {
 		return getConfig().getString(ISLAND_SPAWN_BOX_SCHEMATIC);
+	}
+
+	public String getBeaconSchematicName() {
+		return getConfig().getString(BEACON_SCHEMATIC);
 	}
 
 	public int getDistanceBetweenIslands() {
