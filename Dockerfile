@@ -17,7 +17,7 @@ COPY --chown=awesomenetwork:nogroup plugin-dependencies.txt build/plugin-depende
 COPY --chown=awesomenetwork:nogroup settings.xml /home/awesomenetwork/.m2/settings.xml
 
 # Download plugin dependencies
-RUN sh ~/build/scripts/download-dependencies.sh
+RUN sh build/scripts/download-dependencies.sh
 
 # Build this plugin into the server
 RUN cd ~/build && mvn package && cp ~/build/target/*.jar ~/server/plugins/
